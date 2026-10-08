@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#0a0a0f">
 <title>BossX - Cyber Node Mining</title>
 <style>
-  /* ============ RESET & BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -39,7 +38,6 @@
     display: flex;
     flex-direction: column;
   }
-  
   .notch {
     position: absolute;
     top: 0;
@@ -50,6 +48,56 @@
     background: #000;
     border-radius: 0 0 20px 20px;
     z-index: 100;
+  }
+  
+  /* ============ LOADING SKELETON ============ */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s;
+  }
+  .loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .loading-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    animation: loadingPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes loadingPulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+  .loading-text {
+    font-size: 14px;
+    color: #ffd700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .loading-bar {
+    width: 150px;
+    height: 2px;
+    background: rgba(255,215,0,0.2);
+    margin-top: 15px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #00ff88);
+    width: 0%;
+    animation: loadingFill 2s ease-out forwards;
+  }
+  @keyframes loadingFill {
+    to { width: 100%; }
   }
   
   /* ============ BACKGROUND ============ */
@@ -132,7 +180,9 @@
     cursor: pointer;
     color: #fff;
     font-size: 14px;
+    transition: all 0.2s;
   }
+  .icon-btn:active { transform: scale(0.9); background: rgba(255,215,0,0.1); }
   
   /* ============ SCREENS CONTAINER ============ */
   .screens-container {
@@ -146,11 +196,13 @@
     overflow-y: auto;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s;
+    transform: translateX(30px);
+    transition: opacity 0.4s, transform 0.4s;
   }
   .screen.active {
     opacity: 1;
     pointer-events: auto;
+    transform: translateX(0);
   }
   .screen::-webkit-scrollbar { display: none; }
   
@@ -172,6 +224,11 @@
     border-radius: 20px;
     padding: 18px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transition: border-color 0.5s, box-shadow 0.5s;
+  }
+  .balance-card.active {
+    border-color: rgba(0,255,136,0.4);
+    box-shadow: 0 10px 40px rgba(0,255,136,0.1), 0 0 60px rgba(255,215,0,0.1);
   }
   .balance-header {
     display: flex;
@@ -181,19 +238,28 @@
   }
   .balance-label {
     font-size: 11px;
-    color: #888;
     text-transform: uppercase;
     letter-spacing: 2px;
     display: flex;
     align-items: center;
     gap: 6px;
+    transition: color 0.3s;
   }
-  .balance-label::before {
-    content: '';
+  .balance-label.offline { color: #666; }
+  .balance-label.online { color: #00ff88; }
+  
+  .status-dot {
     width: 6px;
     height: 6px;
-    background: #00ff88;
     border-radius: 50%;
+    transition: all 0.3s;
+  }
+  .status-dot.offline {
+    background: #666;
+    box-shadow: none;
+  }
+  .status-dot.online {
+    background: #00ff88;
     box-shadow: 0 0 10px #00ff88;
     animation: blink 2s infinite;
   }
@@ -201,6 +267,7 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
   }
+  
   .balance-amount {
     font-size: 36px;
     font-weight: 900;
@@ -210,7 +277,12 @@
     font-family: 'Courier New', monospace;
     text-shadow: 0 0 30px rgba(255,215,0,0.3);
     margin-bottom: 12px;
+    transition: text-shadow 0.5s;
   }
+  .balance-card.active .balance-amount {
+    text-shadow: 0 0 40px rgba(255,215,0,0.6);
+  }
+  
   .balance-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -219,11 +291,7 @@
     border-top: 1px solid rgba(255,215,0,0.1);
     border-bottom: 1px solid rgba(255,215,0,0.1);
   }
-  .balance-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
+  .balance-stat { display: flex; flex-direction: column; gap: 3px; }
   .balance-stat-label {
     font-size: 9px;
     color: #666;
@@ -297,24 +365,21 @@
   .orbital-ring.active { opacity: 1; }
   
   .ring-1 {
-    width: 260px;
-    height: 260px;
+    width: 260px; height: 260px;
     border-top-color: #ffd700;
     border-right-color: rgba(255,215,0,0.3);
     animation: rotate1 3s linear infinite;
     box-shadow: 0 0 20px rgba(255,215,0,0.3);
   }
   .ring-2 {
-    width: 220px;
-    height: 220px;
+    width: 220px; height: 220px;
     border-bottom-color: #00ff88;
     border-left-color: rgba(0,255,136,0.3);
     animation: rotate2 2s linear infinite;
     box-shadow: 0 0 20px rgba(0,255,136,0.3);
   }
   .ring-3 {
-    width: 180px;
-    height: 180px;
+    width: 180px; height: 180px;
     border-top-color: #ff8c00;
     border-left-color: rgba(255,140,0,0.3);
     animation: rotate3 4s linear infinite;
@@ -325,7 +390,7 @@
   @keyframes rotate2 { to { transform: rotate(-360deg); } }
   @keyframes rotate3 { to { transform: rotate(360deg) rotateX(60deg); } }
   
-  /* Core Node sebagai BUTTON */
+  /* Core Node Button */
   .core-node-btn {
     position: relative;
     width: 120px;
@@ -346,7 +411,7 @@
     transform: scale(1.02);
   }
   .core-node-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
   .core-node-btn.active {
     opacity: 1;
@@ -418,10 +483,10 @@
     100% { height: 0; top: -50px; }
   }
   
-  /* Status Text di bawah logo */
+  /* Status Text */
   .node-status {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .status-text {
     font-size: 12px;
@@ -431,9 +496,7 @@
     letter-spacing: 1px;
     transition: color 0.3s;
   }
-  .status-text.active {
-    color: #00ff88;
-  }
+  .status-text.active { color: #00ff88; }
   .status-hint {
     font-size: 11px;
     color: #555;
@@ -441,9 +504,7 @@
   }
   
   /* ============ TASKS SCREEN ============ */
-  .tasks-screen, .referral-screen, .profile-screen {
-    padding: 20px;
-  }
+  .tasks-screen, .referral-screen, .profile-screen { padding: 20px; }
   .screen-title {
     font-size: 22px;
     font-weight: 900;
@@ -472,6 +533,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
+  .task-item:hover { background: rgba(255,255,255,0.05); }
   .task-item:active { transform: scale(0.98); }
   .task-icon {
     width: 40px; height: 40px;
@@ -494,10 +556,13 @@
     font-weight: bold;
     cursor: pointer;
     flex-shrink: 0;
+    transition: all 0.2s;
   }
+  .task-btn:active { transform: scale(0.9); }
   .task-btn.done {
     background: rgba(0,255,136,0.1);
     color: #00ff88;
+    cursor: default;
   }
   
   /* ============ REFERRAL SCREEN ============ */
@@ -529,7 +594,9 @@
     font-weight: bold;
     cursor: pointer;
     font-size: 12px;
+    transition: all 0.2s;
   }
+  .btn-copy:active { transform: scale(0.95); }
   
   .team-summary {
     display: grid;
@@ -556,7 +623,9 @@
     gap: 12px;
     margin-bottom: 10px;
     border-left: 3px solid;
+    transition: all 0.2s;
   }
+  .ref-item:hover { background: rgba(255,255,255,0.05); }
   .ref-item.active { border-left-color: #00ff88; }
   .ref-item.late { border-left-color: #ffaa00; }
   .ref-item.inactive { border-left-color: #ff4444; }
@@ -594,7 +663,9 @@
     font-size: 11px;
     cursor: pointer;
     flex-shrink: 0;
+    transition: all 0.2s;
   }
+  .btn-remind:active { background: #ffd700; color: #000; }
   
   /* ============ PROFILE SCREEN ============ */
   .profile-header { text-align: center; padding: 15px 0 25px; }
@@ -650,6 +721,7 @@
     gap: 12px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     cursor: pointer;
+    transition: background 0.2s;
   }
   .menu-item:last-child { border-bottom: none; }
   .menu-item:active { background: rgba(255,255,255,0.05); }
@@ -682,7 +754,7 @@
     cursor: pointer;
     padding: 6px 12px;
     border-radius: 12px;
-    transition: all 0.2s;
+    transition: all 0.3s;
     background: transparent;
     border: none;
     color: #666;
@@ -692,12 +764,13 @@
   .nav-item.active .nav-icon {
     background: rgba(255,215,0,0.15);
     color: #ffd700;
+    transform: translateY(-2px);
   }
   .nav-icon {
     font-size: 18px;
     padding: 8px 14px;
     border-radius: 10px;
-    transition: all 0.2s;
+    transition: all 0.3s;
   }
   .nav-label { font-weight: 600; }
   
@@ -740,6 +813,15 @@
   <div class="phone-frame">
     <div class="notch"></div>
     
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+      <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossX" class="loading-logo">
+      <div class="loading-text">BOSSX</div>
+      <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+      </div>
+    </div>
+    
     <!-- Background -->
     <div class="bg-grid"></div>
     <div class="matrix-container" id="matrix-container"></div>
@@ -758,7 +840,7 @@
     <div class="app-header">
       <div class="logo-mobile">⚡ BOSSX</div>
       <div class="header-icons">
-        <button class="icon-btn">🔔</button>
+        <button class="icon-btn" onclick="playClickSound()">🔔</button>
       </div>
     </div>
     
@@ -770,9 +852,12 @@
         <div class="home-screen">
           
           <!-- Balance Card -->
-          <div class="balance-card">
+          <div class="balance-card" id="balance-card">
             <div class="balance-header">
-              <div class="balance-label">Node Active</div>
+              <div class="balance-label offline" id="balance-label">
+                <span class="status-dot offline" id="status-dot"></span>
+                <span id="status-label-text">Node Offline</span>
+              </div>
               <div style="font-size:10px; color:#666;">TRC20</div>
             </div>
             <div class="balance-amount" id="balance-amount">0.0000</div>
@@ -791,7 +876,6 @@
               </div>
             </div>
             
-            <!-- Next Cycle -->
             <div class="next-cycle">
               <div class="next-cycle-header">
                 <span class="next-cycle-label">⏰ Next Cycle</span>
@@ -803,7 +887,7 @@
             </div>
           </div>
           
-          <!-- Cyber Node dengan LOGO sebagai BUTTON -->
+          <!-- Cyber Node -->
           <div class="node-container">
             <div class="orbital-ring ring-1" id="ring-1"></div>
             <div class="orbital-ring ring-2" id="ring-2"></div>
@@ -819,7 +903,6 @@
             <div class="data-stream" id="stream-3" style="left: 80%;"></div>
           </div>
           
-          <!-- Status Text -->
           <div class="node-status">
             <div class="status-text" id="status-text">Tap Logo to Activate</div>
             <div class="status-hint">Tekan logo untuk mulai menambang</div>
@@ -987,11 +1070,109 @@
 </div>
 
 <script>
+  // ============ LOADING SCREEN ============
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loading-overlay').classList.add('hidden');
+    }, 2200);
+  });
+  
+  // ============ SOUND EFFECTS (Web Audio API) ============
+  let audioCtx = null;
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx;
+  }
+  
+  function playPowerOnSound() {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+  }
+  
+  function playPowerOffSound() {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+  }
+  
+  function playClickSound() {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1000, ctx.currentTime);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.05);
+    } catch(e) {}
+  }
+  
+  function playRewardSound() {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+  }
+  
+  // ============ HAPTIC FEEDBACK ============
+  function vibrate(pattern) {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+  }
+  
   // ============ TAB SWITCHING ============
   const screens = ['screen-home', 'screen-tasks', 'screen-referral', 'screen-profile'];
   function switchTab(index) {
+    playClickSound();
+    vibrate(10);
     screens.forEach((id, i) => {
-      document.getElementById(id).classList.toggle('active', i === index);
+      const screen = document.getElementById(id);
+      if (i === index) {
+        screen.classList.add('active');
+      } else {
+        screen.classList.remove('active');
+      }
     });
     document.querySelectorAll('.nav-item').forEach((item, i) => {
       item.classList.toggle('active', i === index);
@@ -1061,6 +1242,10 @@
   function togglePower() {
     const btn = document.getElementById('core-node-btn');
     const statusText = document.getElementById('status-text');
+    const balanceCard = document.getElementById('balance-card');
+    const balanceLabel = document.getElementById('balance-label');
+    const statusDot = document.getElementById('status-dot');
+    const statusLabelText = document.getElementById('status-label-text');
     const ring1 = document.getElementById('ring-1');
     const ring2 = document.getElementById('ring-2');
     const ring3 = document.getElementById('ring-3');
@@ -1071,10 +1256,24 @@
     isPowerOn = !isPowerOn;
     
     if (isPowerOn) {
+      // Sound & vibration
+      playPowerOnSound();
+      vibrate([30, 50, 30]);
+      
+      // Visual updates
       btn.classList.add('active');
       statusText.textContent = 'Mining Active';
       statusText.classList.add('active');
       
+      // FIX: Update balance card status
+      balanceCard.classList.add('active');
+      balanceLabel.classList.remove('offline');
+      balanceLabel.classList.add('online');
+      statusDot.classList.remove('offline');
+      statusDot.classList.add('online');
+      statusLabelText.textContent = 'Node Active';
+      
+      // Activate rings & streams
       ring1.classList.add('active');
       ring2.classList.add('active');
       ring3.classList.add('active');
@@ -1082,6 +1281,7 @@
       stream2.classList.add('active');
       stream3.classList.add('active');
       
+      // Start mining
       miningInterval = setInterval(() => {
         currentPoints += 0.0010;
         todayEarned += 0.0010;
@@ -1090,10 +1290,24 @@
       
       showToast('⚡ Node Activated');
     } else {
+      // Sound & vibration
+      playPowerOffSound();
+      vibrate(50);
+      
+      // Visual updates
       btn.classList.remove('active');
       statusText.textContent = 'Tap Logo to Activate';
       statusText.classList.remove('active');
       
+      // FIX: Update balance card status
+      balanceCard.classList.remove('active');
+      balanceLabel.classList.remove('online');
+      balanceLabel.classList.add('offline');
+      statusDot.classList.remove('online');
+      statusDot.classList.add('offline');
+      statusLabelText.textContent = 'Node Offline';
+      
+      // Deactivate rings & streams
       ring1.classList.remove('active');
       ring2.classList.remove('active');
       ring3.classList.remove('active');
@@ -1112,6 +1326,10 @@
   function completeTask(el, reward) {
     const btn = el.querySelector('.task-btn');
     if (btn.classList.contains('done')) return;
+    
+    playRewardSound();
+    vibrate(20);
+    
     currentPoints += reward;
     todayEarned += reward;
     updateBalance();
@@ -1120,8 +1338,17 @@
     showToast(`+${reward.toFixed(4)} $BOSSX`);
   }
   
-  function remindUser(name) { showToast(`🔔 Notifikasi dikirim ke ${name}`); }
-  function copyLink() { showToast('📋 Link berhasil disalin!'); }
+  function remindUser(name) {
+    playClickSound();
+    vibrate(15);
+    showToast(`🔔 Notifikasi dikirim ke ${name}`);
+  }
+  
+  function copyLink() {
+    playClickSound();
+    vibrate(15);
+    showToast('📋 Link berhasil disalin!');
+  }
   
   function showToast(msg) {
     const toast = document.getElementById('toast');
