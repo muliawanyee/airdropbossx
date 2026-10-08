@@ -52,7 +52,7 @@
     z-index: 100;
   }
   
-  /* ============ BACKGROUND GRID ============ */
+  /* ============ BACKGROUND ============ */
   .bg-grid {
     position: absolute;
     inset: 0;
@@ -61,13 +61,13 @@
       linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridMove 20s linear infinite;
+    pointer-events: none;
   }
   @keyframes gridMove {
     0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
     100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
   }
   
-  /* ============ MATRIX PARTICLES ============ */
   .matrix-container {
     position: absolute;
     inset: 0;
@@ -79,9 +79,9 @@
     top: -20px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    color: rgba(0,255,136,0.4);
+    color: rgba(0,255,136,0.3);
     animation: matrixFall linear infinite;
-    text-shadow: 0 0 5px rgba(0,255,136,0.8);
+    text-shadow: 0 0 5px rgba(0,255,136,0.6);
   }
   @keyframes matrixFall {
     0% { transform: translateY(-20px); opacity: 0; }
@@ -106,7 +106,7 @@
   
   /* ============ APP HEADER ============ */
   .app-header {
-    padding: 15px 20px 10px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -114,50 +114,81 @@
     flex-shrink: 0;
     z-index: 10;
     position: relative;
+    border-bottom: 1px solid rgba(255,215,0,0.1);
   }
   .logo-mobile {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 900;
     background: linear-gradient(90deg, #ffd700, #00ff88);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 2px;
   }
+  .header-icons { display: flex; gap: 10px; }
+  .icon-btn {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+  }
   
-  /* ============ MAIN CONTENT ============ */
-  .main-content {
+  /* ============ SCREENS CONTAINER ============ */
+  .screens-container {
     flex: 1;
     position: relative;
     overflow: hidden;
+  }
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .screen.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  
+  /* ============ HOME SCREEN ============ */
+  .home-screen {
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 20px;
   }
   
-  /* ============ BALANCE CARD ============ */
+  /* Balance Card (Opsi A - dengan Next Cycle) */
   .balance-card {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
+    width: 100%;
     background: rgba(10,10,15,0.7);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,215,0,0.2);
     border-radius: 20px;
-    padding: 20px;
-    z-index: 20;
+    padding: 18px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .balance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
   .balance-label {
     font-size: 11px;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
   }
   .balance-label::before {
     content: '';
@@ -180,13 +211,15 @@
     -webkit-text-fill-color: transparent;
     font-family: 'Courier New', monospace;
     text-shadow: 0 0 30px rgba(255,215,0,0.3);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .balance-stats {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 12px 0;
     border-top: 1px solid rgba(255,215,0,0.1);
+    border-bottom: 1px solid rgba(255,215,0,0.1);
   }
   .balance-stat {
     display: flex;
@@ -194,27 +227,68 @@
     gap: 3px;
   }
   .balance-stat-label {
-    font-size: 10px;
+    font-size: 9px;
     color: #666;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   .balance-stat-value {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     color: #00ff88;
   }
   
-  /* ============ CYBER NODE (CENTER) ============ */
+  /* Next Cycle di dalam Balance Card */
+  .next-cycle {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .next-cycle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .next-cycle-label {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .next-cycle-time {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffd700;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+  }
+  .next-cycle-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,215,0,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .next-cycle-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #ffd700);
+    border-radius: 2px;
+    transition: width 1s linear;
+    box-shadow: 0 0 10px rgba(255,215,0,0.5);
+  }
+  
+  /* ============ CYBER NODE ============ */
   .node-container {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 10px 0;
   }
   
-  /* Orbital Rings */
   .orbital-ring {
     position: absolute;
     border: 2px solid transparent;
@@ -222,53 +296,41 @@
     opacity: 0;
     transition: opacity 0.5s;
   }
-  .orbital-ring.active {
-    opacity: 1;
-  }
+  .orbital-ring.active { opacity: 1; }
   
   .ring-1 {
-    width: 280px;
-    height: 280px;
+    width: 260px;
+    height: 260px;
     border-top-color: #ffd700;
     border-right-color: rgba(255,215,0,0.3);
     animation: rotate1 3s linear infinite;
     box-shadow: 0 0 20px rgba(255,215,0,0.3);
   }
   .ring-2 {
-    width: 240px;
-    height: 240px;
+    width: 220px;
+    height: 220px;
     border-bottom-color: #00ff88;
     border-left-color: rgba(0,255,136,0.3);
     animation: rotate2 2s linear infinite;
     box-shadow: 0 0 20px rgba(0,255,136,0.3);
   }
   .ring-3 {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border-top-color: #ff8c00;
     border-left-color: rgba(255,140,0,0.3);
     animation: rotate3 4s linear infinite;
     box-shadow: 0 0 20px rgba(255,140,0,0.3);
   }
   
-  @keyframes rotate1 {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  @keyframes rotate2 {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(-360deg); }
-  }
-  @keyframes rotate3 {
-    0% { transform: rotate(0deg) rotateX(60deg); }
-    100% { transform: rotate(360deg) rotateX(60deg); }
-  }
+  @keyframes rotate1 { to { transform: rotate(360deg); } }
+  @keyframes rotate2 { to { transform: rotate(-360deg); } }
+  @keyframes rotate3 { to { transform: rotate(360deg) rotateX(60deg); } }
   
-  /* Core Node */
   .core-node {
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, #ffd700, #ff8c00, #cc6600);
     box-shadow: 
@@ -288,29 +350,20 @@
   @keyframes corePulse {
     0%, 100% { 
       transform: scale(1);
-      box-shadow: 
-        0 0 60px rgba(255,215,0,0.6),
-        0 0 100px rgba(255,215,0,0.3),
-        inset 0 0 30px rgba(255,255,255,0.3);
+      box-shadow: 0 0 60px rgba(255,215,0,0.6), 0 0 100px rgba(255,215,0,0.3), inset 0 0 30px rgba(255,255,255,0.3);
     }
     50% { 
       transform: scale(1.05);
-      box-shadow: 
-        0 0 80px rgba(255,215,0,0.8),
-        0 0 150px rgba(255,215,0,0.5),
-        inset 0 0 40px rgba(255,255,255,0.5);
+      box-shadow: 0 0 80px rgba(255,215,0,0.8), 0 0 150px rgba(255,215,0,0.5), inset 0 0 40px rgba(255,255,255,0.5);
     }
   }
   
-  /* Core Inner Symbol */
   .core-symbol {
-    font-size: 40px;
+    font-size: 36px;
     color: #000;
     font-weight: 900;
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
   }
   
-  /* Data Streams */
   .data-stream {
     position: absolute;
     width: 2px;
@@ -331,22 +384,17 @@
   
   /* ============ POWER BUTTON ============ */
   .power-section {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
     text-align: center;
-    z-index: 20;
   }
   .power-btn {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background: rgba(10,10,15,0.8);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(0,255,136,0.3);
     color: #00ff88;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 900;
     cursor: pointer;
     transition: all 0.3s;
@@ -371,11 +419,8 @@
     color: #ffd700;
     box-shadow: 0 0 50px rgba(255,215,0,0.5);
   }
-  .power-btn.active::before {
-    border-color: rgba(255,215,0,0.3);
-  }
   .power-status {
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 11px;
     color: #00ff88;
     font-weight: 600;
@@ -384,48 +429,312 @@
   }
   .power-status.off { color: #666; }
   
-  /* ============ COUNTDOWN ============ */
-  .countdown-section {
-    position: absolute;
-    bottom: 30px;
-    left: 20px;
-    right: 20px;
-    z-index: 20;
+  /* ============ TASKS SCREEN ============ */
+  .tasks-screen {
+    padding: 20px;
   }
-  .countdown-card {
-    background: rgba(10,10,15,0.7);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,215,0,0.15);
+  .screen-title {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #ffd700, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .section-title {
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 10px;
+  }
+  
+  .task-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,215,0,0.1);
+    border-radius: 15px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .task-item:active { transform: scale(0.98); }
+  .task-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(0,255,136,0.1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .task-info { flex: 1; min-width: 0; }
+  .task-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .task-reward { font-size: 11px; color: #00ff88; }
+  .task-btn {
+    padding: 6px 14px;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .task-btn.done {
+    background: rgba(0,255,136,0.1);
+    color: #00ff88;
+  }
+  
+  /* ============ REFERRAL SCREEN ============ */
+  .referral-screen {
+    padding: 20px;
+  }
+  
+  .ref-link-card {
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,255,136,0.05));
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 20px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .ref-link-title {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .ref-link-box {
+    background: rgba(0,0,0,0.5);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: #ffd700;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+  .btn-copy {
+    padding: 10px 25px;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .team-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .team-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 15px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .team-stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  .team-stat-label {
+    font-size: 9px;
+    color: #888;
+    text-transform: uppercase;
+  }
+  
+  .ref-item {
+    background: rgba(255,255,255,0.03);
+    border-radius: 15px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+  }
+  .ref-item.active { border-left-color: #00ff88; }
+  .ref-item.late { border-left-color: #ffaa00; }
+  .ref-item.inactive { border-left-color: #ff4444; }
+  
+  .ref-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+    color: #000;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .ref-info { flex: 1; min-width: 0; }
+  .ref-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .ref-detail { font-size: 10px; color: #888; }
+  .ref-status {
+    font-size: 9px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .ref-status.active { background: rgba(0,255,136,0.15); color: #00ff88; }
+  .ref-status.late { background: rgba(255,170,0,0.15); color: #ffaa00; }
+  .ref-status.inactive { background: rgba(255,68,68,0.15); color: #ff4444; }
+  
+  .btn-remind {
+    padding: 6px 10px;
+    background: transparent;
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    border-radius: 15px;
+    font-size: 11px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  
+  /* ============ PROFILE SCREEN ============ */
+  .profile-screen {
+    padding: 20px;
+  }
+  .profile-header {
+    text-align: center;
+    padding: 15px 0 25px;
+  }
+  .profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #000;
+    margin: 0 auto 12px;
+    border: 3px solid rgba(255,215,0,0.3);
+    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+  .profile-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .profile-level {
+    display: inline-block;
+    padding: 4px 15px;
+    background: linear-gradient(90deg, #c0c0c0, #808080);
+    border-radius: 15px;
+    font-size: 11px;
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .profile-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .profile-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 15px;
     padding: 12px;
     text-align: center;
   }
-  .countdown-label {
-    font-size: 10px;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-  }
-  .countdown-time {
-    font-size: 22px;
+  .profile-stat-value {
+    font-size: 18px;
     font-weight: bold;
     color: #ffd700;
-    font-family: 'Courier New', monospace;
-    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+    margin-bottom: 3px;
   }
+  .profile-stat-label {
+    font-size: 10px;
+    color: #888;
+  }
+  
+  .menu-list {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .menu-item {
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item:active { background: rgba(255,255,255,0.05); }
+  .menu-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(255,215,0,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .menu-label { flex: 1; font-size: 13px; }
+  .menu-arrow { color: #555; }
+  
+  /* ============ BOTTOM NAVIGATION ============ */
+  .bottom-nav {
+    background: rgba(10,10,15,0.98);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,215,0,0.15);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+    flex-shrink: 0;
+    z-index: 50;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 10px;
+  }
+  .nav-item.active { color: #ffd700; }
+  .nav-item.active .nav-icon {
+    background: rgba(255,215,0,0.15);
+    color: #ffd700;
+  }
+  .nav-icon {
+    font-size: 18px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .nav-label { font-weight: 600; }
   
   /* ============ TOAST ============ */
   .toast {
     position: absolute;
-    top: 120px;
+    top: 80px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
     background: rgba(0,255,136,0.95);
     color: #000;
-    padding: 12px 25px;
+    padding: 10px 20px;
     border-radius: 25px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     z-index: 1000;
     transition: transform 0.3s;
@@ -454,10 +763,8 @@
   <div class="phone-frame">
     <div class="notch"></div>
     
-    <!-- Background Grid -->
+    <!-- Background -->
     <div class="bg-grid"></div>
-    
-    <!-- Matrix Particles -->
     <div class="matrix-container" id="matrix-container"></div>
     
     <!-- Status Bar -->
@@ -473,60 +780,282 @@
     <!-- App Header -->
     <div class="app-header">
       <div class="logo-mobile">⚡ BOSSX</div>
+      <div class="header-icons">
+        <button class="icon-btn">🔔</button>
+      </div>
     </div>
     
-    <!-- Main Content -->
-    <div class="main-content">
+    <!-- Screens Container -->
+    <div class="screens-container">
       
-      <!-- Balance Card -->
-      <div class="balance-card">
-        <div class="balance-label">Node Active</div>
-        <div class="balance-amount" id="balance-amount">0.000</div>
-        <div class="balance-stats">
-          <div class="balance-stat">
-            <span class="balance-stat-label">Rate</span>
-            <span class="balance-stat-value" id="mining-rate">+0.015/s</span>
+      <!-- HOME SCREEN -->
+      <div id="screen-home" class="screen active">
+        <div class="home-screen">
+          
+          <!-- Balance Card (dengan Next Cycle di dalamnya) -->
+          <div class="balance-card">
+            <div class="balance-header">
+              <div class="balance-label">Node Active</div>
+              <div style="font-size:10px; color:#666;">TRC20</div>
+            </div>
+            <div class="balance-amount" id="balance-amount">0.0000</div>
+            <div class="balance-stats">
+              <div class="balance-stat">
+                <span class="balance-stat-label">Rate</span>
+                <span class="balance-stat-value" id="mining-rate">+0.0010/s</span>
+              </div>
+              <div class="balance-stat">
+                <span class="balance-stat-label">Today</span>
+                <span class="balance-stat-value" id="today-earned">+0.0000</span>
+              </div>
+              <div class="balance-stat">
+                <span class="balance-stat-label">Est. USD</span>
+                <span class="balance-stat-value" id="est-usd">$0.00</span>
+              </div>
+            </div>
+            
+            <!-- Next Cycle di dalam Balance Card -->
+            <div class="next-cycle">
+              <div class="next-cycle-header">
+                <span class="next-cycle-label">⏰ Next Cycle</span>
+                <span class="next-cycle-time" id="countdown">--:--:--</span>
+              </div>
+              <div class="next-cycle-bar">
+                <div class="next-cycle-progress" id="cycle-progress" style="width: 0%;"></div>
+              </div>
+            </div>
           </div>
-          <div class="balance-stat">
-            <span class="balance-stat-label">Today</span>
-            <span class="balance-stat-value" id="today-earned">+0.000</span>
+          
+          <!-- Cyber Node -->
+          <div class="node-container">
+            <div class="orbital-ring ring-1" id="ring-1"></div>
+            <div class="orbital-ring ring-2" id="ring-2"></div>
+            <div class="orbital-ring ring-3" id="ring-3"></div>
+            
+            <div class="core-node" id="core-node">
+              <div class="core-symbol">⚡</div>
+            </div>
+            
+            <div class="data-stream" id="stream-1" style="left: 20%;"></div>
+            <div class="data-stream" id="stream-2" style="left: 50%;"></div>
+            <div class="data-stream" id="stream-3" style="left: 80%;"></div>
           </div>
-          <div class="balance-stat">
-            <span class="balance-stat-label">Est. USD</span>
-            <span class="balance-stat-value">$0.00</span>
+          
+          <!-- Power Button -->
+          <div class="power-section">
+            <button class="power-btn" id="power-btn" onclick="togglePower()">
+              ON
+            </button>
+            <div class="power-status off" id="power-status">Node Offline</div>
           </div>
+          
         </div>
       </div>
       
-      <!-- Cyber Node -->
-      <div class="node-container">
-        <div class="orbital-ring ring-1" id="ring-1"></div>
-        <div class="orbital-ring ring-2" id="ring-2"></div>
-        <div class="orbital-ring ring-3" id="ring-3"></div>
-        
-        <div class="core-node" id="core-node">
-          <div class="core-symbol">⚡</div>
+      <!-- TASKS SCREEN -->
+      <div id="screen-tasks" class="screen">
+        <div class="tasks-screen">
+          <div class="screen-title">🎁 Pusat Tugas</div>
+          
+          <div class="section-title">Tugas Sosial</div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.05)">
+            <div class="task-icon">📱</div>
+            <div class="task-info">
+              <div class="task-name">Join Telegram</div>
+              <div class="task-reward">+0.0500 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.05)">
+            <div class="task-icon">🐦</div>
+            <div class="task-info">
+              <div class="task-name">Follow Twitter</div>
+              <div class="task-reward">+0.0500 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.08)">
+            <div class="task-icon">🔄</div>
+            <div class="task-info">
+              <div class="task-name">Retweet Post Terbaru</div>
+              <div class="task-reward">+0.0800 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
+          <div class="section-title">Tugas Edukasi</div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.10)">
+            <div class="task-icon">🎥</div>
+            <div class="task-info">
+              <div class="task-name">Tonton Video BossX</div>
+              <div class="task-reward">+0.1000 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.15)">
+            <div class="task-icon">📖</div>
+            <div class="task-info">
+              <div class="task-name">Baca Whitepaper</div>
+              <div class="task-reward">+0.1500 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
+          <div class="task-item" onclick="completeTask(this, 0.25)">
+            <div class="task-icon">⛓️</div>
+            <div class="task-info">
+              <div class="task-name">Transaksi On-Chain Pertama</div>
+              <div class="task-reward">+0.2500 $BOSSX</div>
+            </div>
+            <button class="task-btn">Kerjakan</button>
+          </div>
+          
         </div>
-        
-        <!-- Data Streams -->
-        <div class="data-stream" id="stream-1" style="left: 20%;"></div>
-        <div class="data-stream" id="stream-2" style="left: 50%;"></div>
-        <div class="data-stream" id="stream-3" style="left: 80%;"></div>
       </div>
       
-      <!-- Power Button -->
-      <div class="power-section">
-        <button class="power-btn" id="power-btn" onclick="togglePower()">
-          ON
-        </button>
-        <div class="power-status off" id="power-status">Node Offline</div>
+      <!-- REFERRAL SCREEN -->
+      <div id="screen-referral" class="screen">
+        <div class="referral-screen">
+          <div class="screen-title">👥 Tim Saya</div>
+          
+          <div class="ref-link-card">
+            <div class="ref-link-title">🔗 Link Referral Kamu</div>
+            <div class="ref-link-box">bossx.io/ref/bossbuilder2026</div>
+            <button class="btn-copy" onclick="copyLink()">📋 Salin Link</button>
+          </div>
+          
+          <div class="team-summary">
+            <div class="team-stat">
+              <div class="team-stat-value" style="color:#ffd700;">15</div>
+              <div class="team-stat-label">Total</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-value" style="color:#00ff88;">12</div>
+              <div class="team-stat-label">Aktif</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-value" style="color:#ff4444;">3</div>
+              <div class="team-stat-label">Belum ON</div>
+            </div>
+          </div>
+          
+          <div class="section-title">Daftar Referral</div>
+          
+          <div class="ref-item active">
+            <div class="ref-avatar">BS</div>
+            <div class="ref-info">
+              <div class="ref-name">Budi Santoso</div>
+              <div class="ref-detail">ON sejak 06:02 • Level 1</div>
+            </div>
+            <span class="ref-status active">AKTIF</span>
+          </div>
+          
+          <div class="ref-item active">
+            <div class="ref-avatar">SA</div>
+            <div class="ref-info">
+              <div class="ref-name">Siti Aminah</div>
+              <div class="ref-detail">ON sejak 06:15 • Level 1</div>
+            </div>
+            <span class="ref-status active">AKTIF</span>
+          </div>
+          
+          <div class="ref-item late">
+            <div class="ref-avatar">AP</div>
+            <div class="ref-info">
+              <div class="ref-name">Andi Pratama</div>
+              <div class="ref-detail">ON jam 08:30 • Telat 2.5 jam</div>
+            </div>
+            <span class="ref-status late">TELAT</span>
+          </div>
+          
+          <div class="ref-item inactive">
+            <div class="ref-avatar">RW</div>
+            <div class="ref-info">
+              <div class="ref-name">Rina Wati</div>
+              <div class="ref-detail">Belum ON hari ini</div>
+            </div>
+            <button class="btn-remind" onclick="remindUser('Rina')">🔔</button>
+          </div>
+          
+          <div class="ref-item inactive">
+            <div class="ref-avatar">DS</div>
+            <div class="ref-info">
+              <div class="ref-name">Doni Saputra</div>
+              <div class="ref-detail">Belum ON hari ini</div>
+            </div>
+            <button class="btn-remind" onclick="remindUser('Doni')">🔔</button>
+          </div>
+          
+        </div>
       </div>
       
-      <!-- Countdown -->
-      <div class="countdown-section">
-        <div class="countdown-card">
-          <div class="countdown-label">⏰ Next Cycle</div>
-          <div class="countdown-time" id="countdown">--:--:--</div>
+      <!-- PROFILE SCREEN -->
+      <div id="screen-profile" class="screen">
+        <div class="profile-screen">
+          
+          <div class="profile-header">
+            <div class="profile-avatar">BB</div>
+            <div class="profile-name">BossBuilder</div>
+            <span class="profile-level">🥈 SILVER TIER</span>
+          </div>
+          
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="profile-stat-value" id="profile-points">0.0000</div>
+              <div class="profile-stat-label">Total $BOSSX</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">15</div>
+              <div class="profile-stat-label">Total Referral</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">7</div>
+              <div class="profile-stat-label">Streak ON</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">🥈</div>
+              <div class="profile-stat-label">Tier Level</div>
+            </div>
+          </div>
+          
+          <div class="menu-list">
+            <div class="menu-item">
+              <div class="menu-icon">💼</div>
+              <div class="menu-label">Wallet Saya</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">🔄</div>
+              <div class="menu-label">Konversi ke Token</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">📊</div>
+              <div class="menu-label">Riwayat Transaksi</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">🏆</div>
+              <div class="menu-label">Badge & Achievement</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">⚙️</div>
+              <div class="menu-label">Pengaturan</div>
+              <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon">❓</div>
+              <div class="menu-label">Bantuan & FAQ</div>
+              <div class="menu-arrow">›</div>
+            </div>
+          </div>
+          
         </div>
       </div>
       
@@ -535,10 +1064,42 @@
     <!-- Toast -->
     <div class="toast" id="toast">✅ Node Activated</div>
     
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab(0)">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">Home</div>
+      </button>
+      <button class="nav-item" onclick="switchTab(1)">
+        <div class="nav-icon">🎁</div>
+        <div class="nav-label">Tugas</div>
+      </button>
+      <button class="nav-item" onclick="switchTab(2)">
+        <div class="nav-icon">👥</div>
+        <div class="nav-label">Referral</div>
+      </button>
+      <button class="nav-item" onclick="switchTab(3)">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profil</div>
+      </button>
+    </div>
+    
   </div>
 </div>
 
 <script>
+  // ============ TAB SWITCHING ============
+  const screens = ['screen-home', 'screen-tasks', 'screen-referral', 'screen-profile'];
+  
+  function switchTab(index) {
+    screens.forEach((id, i) => {
+      document.getElementById(id).classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.nav-item').forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+    });
+  }
+  
   // ============ TIME DISPLAY ============
   function updateTime() {
     const now = new Date();
@@ -549,7 +1110,7 @@
   updateTime();
   setInterval(updateTime, 1000);
   
-  // ============ COUNTDOWN ============
+  // ============ COUNTDOWN + PROGRESS BAR ============
   function updateCountdown() {
     const now = new Date();
     const target = new Date();
@@ -563,6 +1124,12 @@
     
     document.getElementById('countdown').textContent = 
       `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    
+    // Progress bar (24 jam = 100%)
+    const totalSecondsInCycle = 24 * 60 * 60;
+    const elapsedSeconds = totalSecondsInCycle - (diff / 1000);
+    const progress = (elapsedSeconds / totalSecondsInCycle) * 100;
+    document.getElementById('cycle-progress').style.width = progress + '%';
   }
   setInterval(updateCountdown, 1000);
   updateCountdown();
@@ -572,7 +1139,7 @@
     const container = document.getElementById('matrix-container');
     const chars = '01';
     
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 25; i++) {
       const char = document.createElement('div');
       char.className = 'matrix-char';
       char.textContent = chars[Math.floor(Math.random() * chars.length)];
@@ -584,7 +1151,7 @@
   }
   createMatrixParticles();
   
-  // ============ MINING LOGIC ============
+  // ============ MINING LOGIC (0.0010 per detik) ============
   let currentPoints = 0;
   let todayEarned = 0;
   let isPowerOn = false;
@@ -592,9 +1159,13 @@
   
   function updateBalance() {
     document.getElementById('balance-amount').textContent = 
-      currentPoints.toFixed(3);
+      currentPoints.toFixed(4);
     document.getElementById('today-earned').textContent = 
-      '+' + todayEarned.toFixed(3);
+      '+' + todayEarned.toFixed(4);
+    document.getElementById('est-usd').textContent = 
+      '$' + (currentPoints * 0.05).toFixed(2); // asumsi 1 $BOSSX = $0.05
+    document.getElementById('profile-points').textContent = 
+      currentPoints.toFixed(4);
   }
   
   function togglePower() {
@@ -612,11 +1183,10 @@
     
     if (isPowerOn) {
       btn.classList.add('active');
-      btn.textContent = 'ACTIVE';
+      btn.textContent = 'ON';
       status.textContent = 'Node Online';
       status.classList.remove('off');
       
-      // Activate node
       coreNode.classList.add('active');
       ring1.classList.add('active');
       ring2.classList.add('active');
@@ -625,10 +1195,10 @@
       stream2.classList.add('active');
       stream3.classList.add('active');
       
-      // Start mining
+      // Mining 0.0010 per detik
       miningInterval = setInterval(() => {
-        currentPoints += 0.015;
-        todayEarned += 0.015;
+        currentPoints += 0.0010;
+        todayEarned += 0.0010;
         updateBalance();
       }, 1000);
       
@@ -639,7 +1209,6 @@
       status.textContent = 'Node Offline';
       status.classList.add('off');
       
-      // Deactivate node
       coreNode.classList.remove('active');
       ring1.classList.remove('active');
       ring2.classList.remove('active');
@@ -648,7 +1217,6 @@
       stream2.classList.remove('active');
       stream3.classList.remove('active');
       
-      // Stop mining
       if (miningInterval) {
         clearInterval(miningInterval);
         miningInterval = null;
@@ -656,6 +1224,29 @@
       
       showToast('⏸️ Node Deactivated');
     }
+  }
+  
+  // ============ COMPLETE TASK ============
+  function completeTask(el, reward) {
+    const btn = el.querySelector('.task-btn');
+    if (btn.classList.contains('done')) return;
+    
+    currentPoints += reward;
+    todayEarned += reward;
+    updateBalance();
+    btn.textContent = '✓';
+    btn.classList.add('done');
+    showToast(`+${reward.toFixed(4)} $BOSSX`);
+  }
+  
+  // ============ REMIND USER ============
+  function remindUser(name) {
+    showToast(`🔔 Notifikasi dikirim ke ${name}`);
+  }
+  
+  // ============ COPY LINK ============
+  function copyLink() {
+    showToast('📋 Link berhasil disalin!');
   }
   
   // ============ TOAST ============
