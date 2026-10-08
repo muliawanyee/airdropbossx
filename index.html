@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BossX - Reward Per Detik untuk Semua Orang</title>
+<style>
+  /* ============ RESET & BASE ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  /* ============ NAVIGATION ============ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .logo {
+    font-size: 24px; font-weight: bold;
+    background: linear-gradient(90deg, #ffd700, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-tabs { display: flex; gap: 10px; }
+  .nav-tab {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid rgba(255,215,0,0.3);
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+  }
+  .nav-tab.active {
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    color: #000;
+    border-color: transparent;
+    font-weight: bold;
+  }
+  .btn-wallet {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #00ff88, #00cc6a);
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+  }
+  .btn-wallet:hover { transform: scale(1.05); }
+  
+  /* ============ PAGE CONTAINER ============ */
+  .page { display: none; padding-top: 80px; min-height: 100vh; }
+  .page.active { display: block; }
+  
+  /* ============ LANDING PAGE ============ */
+  .hero {
+    min-height: 90vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: radial-gradient(circle at 50% 30%, rgba(255,215,0,0.1), transparent 60%);
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #fff, #ffd700, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: 18px;
+    color: #aaa;
+    max-width: 700px;
+    margin-bottom: 40px;
+  }
+  .cta-group {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  }
+  .cta-card {
+    padding: 30px 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 280px;
+    text-align: left;
+  }
+  .cta-free {
+    background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,204,106,0.05));
+    border: 2px solid #00ff88;
+  }
+  .cta-premium {
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.05));
+    border: 2px solid #ffd700;
+  }
+  .cta-card:hover { transform: translateY(-5px); box-shadow: 0 10px 40px rgba(255,215,0,0.2); }
+  .cta-card h3 { font-size: 22px; margin-bottom: 10px; }
+  .cta-card p { font-size: 14px; color: #aaa; margin: 0; }
+  .cta-icon { font-size: 36px; margin-bottom: 10px; }
+  
+  /* Countdown */
+  .countdown-box {
+    margin-top: 50px;
+    padding: 20px 40px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 15px;
+    text-align: center;
+  }
+  .countdown-label { font-size: 14px; color: #aaa; margin-bottom: 10px; }
+  .countdown-time {
+    font-size: 32px; font-weight: bold;
+    color: #ffd700;
+    font-family: 'Courier New', monospace;
+  }
+  
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 36px; font-weight: bold;
+    color: #00ff88;
+    margin-bottom: 5px;
+  }
+  .stat-label { color: #888; font-size: 14px; }
+  
+  /* How it works */
+  .section { padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
+  .section h2 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 40px;
+    background: linear-gradient(90deg, #ffd700, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .step {
+    background: rgba(255,255,255,0.03);
+    padding: 30px;
+    border-radius: 15px;
+    border-left: 3px solid #ffd700;
+  }
+  .step-num {
+    font-size: 48px;
+    color: rgba(255,215,0,0.3);
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .step h4 { margin-bottom: 10px; color: #ffd700; }
+  .step p { color: #aaa; font-size: 14px; }
+  
+  /* ============ DASHBOARD ============ */
+  .dashboard {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .dash-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px; flex-wrap: wrap; gap: 15px;
+  }
+  .user-info h2 { font-size: 24px; margin-bottom: 5px; }
+  .user-info .level {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(90deg, #c0c0c0, #808080);
+    border-radius: 10px;
+    font-size: 12px;
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .dash-grid { grid-template-columns: 1fr; }
+  }
+  
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 15px;
+  }
+  .card-title {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+  
+  /* Main Stats */
+  .main-stats {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,255,136,0.05));
+    border: 1px solid rgba(255,215,0,0.3);
+  }
+  .points-display {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+  }
+  .points-sub {
+    display: flex; gap: 30px; flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .points-sub-item {
+    display: flex; flex-direction: column;
+  }
+  .points-sub-label { font-size: 12px; color: #888; }
+  .points-sub-value { font-size: 20px; color: #00ff88; font-weight: bold; }
+  
+  /* Power Button */
+  .power-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+  }
+  .power-btn {
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #00ff88, #00cc6a);
+    border: 5px solid #00ff88;
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 40px rgba(0,255,136,0.5);
+    margin: 20px auto;
+    display: block;
+  }
+  .power-btn:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(0,255,136,0.8); }
+  .power-btn.active {
+    background: radial-gradient(circle, #ffd700, #ff8c00);
+    border-color: #ffd700;
+    box-shadow: 0 0 60px rgba(255,215,0,0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(255,215,0,0.5); }
+    50% { box-shadow: 0 0 80px rgba(255,215,0,0.8); }
+  }
+  .power-status {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #aaa;
+  }
+  .power-status.active { color: #00ff88; }
+  
+  /* Tasks */
+  .task-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .task-item:hover { background: rgba(255,255,255,0.06); }
+  .task-info { flex: 1; }
+  .task-name { font-size: 14px; margin-bottom: 3px; }
+  .task-reward { font-size: 12px; color: #00ff88; }
+  .task-btn {
+    padding: 6px 14px;
+    background: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .task-btn.done {
+    background: #333;
+    color: #00ff88;
+    cursor: default;
+  }
+  
+  /* Referrals */
+  .ref-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .ref-stat {
+    text-align: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+  }
+  .ref-stat-value { font-size: 24px; font-weight: bold; color: #ffd700; }
+  .ref-stat-label { font-size: 11px; color: #888; margin-top: 3px; }
+  
+  .ref-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 3px solid;
+  }
+  .ref-item.active { border-left-color: #00ff88; }
+  .ref-item.inactive { border-left-color: #ff4444; }
+  .ref-item.late { border-left-color: #ffaa00; }
+  .ref-name { font-size: 14px; }
+  .ref-status { font-size: 12px; display: flex; align-items: center; gap: 5px; }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+  }
+  .status-dot.active { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
+  .status-dot.inactive { background: #ff4444; }
+  .status-dot.late { background: #ffaa00; }
+  
+  .btn-remind {
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .btn-remind:hover { background: #ffd700; color: #000; }
+  
+  /* Alert Box */
+  .alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .alert.show { display: block; }
+  .alert-warning {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid #ff4444;
+    color: #ff8888;
+  }
+  .alert-success {
+    background: rgba(0,255,136,0.1);
+    border: 1px solid #00ff88;
+    color: #00ff88;
+  }
+  
+  /* Footer */
+  footer {
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 60px;
+    color: #666;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVIGATION ============ -->
+<nav class="nav">
+  <div class="logo">⚡ BOSSX</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('landing')">🏠 Home</button>
+    <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
+  </div>
+  <button class="btn-wallet">🔗 Connect Wallet</button>
+</nav>
+
+<!-- ============ LANDING PAGE ============ -->
+<div id="landing" class="page active">
+  
+  <!-- HERO -->
+  <section class="hero">
+    <h1>REWARD PER DETIK.<br>UNTUK SEMUA ORANG.</h1>
+    <p>BossX adalah masternode TRC20 pertama dengan reward real-time. Mulai gratis kumpulkan poin, atau maksimalkan dengan aktifkan masternode.</p>
+    
+    <div class="cta-group">
+      <div class="cta-card cta-free" onclick="showPage('dashboard')">
+        <div class="cta-icon">🟢</div>
+        <h3>Mulai Gratis</h3>
+        <p>Kumpulkan Poin → Konversi ke Token</p>
+      </div>
+      <div class="cta-card cta-premium">
+        <div class="cta-icon">🟡</div>
+        <h3>Aktifkan Masternode</h3>
+        <p>Reward Maksimal Per Detik</p>
+      </div>
+    </div>
+    
+    <div class="countdown-box">
+      <div class="countdown-label">⏰ Siklus Baru Dimulai Dalam:</div>
+      <div class="countdown-time" id="countdown">--:--:--</div>
+    </div>
+  </section>
+  
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-users">0</div>
+      <div class="stat-label">Pengguna Terdaftar</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-points">0</div>
+      <div class="stat-label">Poin Ditambang Hari Ini</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-active">0</div>
+      <div class="stat-label">Referral Aktif</div>
+    </div>
+  </section>
+  
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <h2>CARA KERJA BOSSX</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h4>Kumpulkan Poin</h4>
+        <p>Selesaikan tugas sosial & edukasi untuk mengumpulkan BossX Points. Nambang otomatis setiap detik.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h4>Ajak Teman</h4>
+        <p>Bagikan link referral. Dapatkan bonus 10% dari tambang downline selama mereka aktif ON Power tiap pagi.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h4>ON Power Tiap Pagi</h4>
+        <p>Tekan tombol ON sebelum jam 12 siang. Telat ON = hasil berkurang. Konsisten = bonus streak!</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h4>Konversi ke Token</h4>
+        <p>Saat TGE, tukar poin ke $BOSSX. Jual di DEX atau stake ke masternode real untuk reward maksimal.</p>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    <p>© 2026 BossX. Reward Per Detik. Built on TRON Network.</p>
+  </footer>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="page">
+  <div class="dashboard">
+    
+    <!-- Alert -->
+    <div class="alert alert-warning" id="alert-late">
+      ⚠️ Anda terlambat 2 jam! Anda kehilangan potensi <strong>72.000 Poin</strong> hari ini. Besok pasang alarm jam 05:55!
+    </div>
+    <div class="alert alert-success" id="alert-success" style="display:none;">
+      ✅ Power ON berhasil! Boost aktif untuk tim Anda.
+    </div>
+    
+    <!-- Header -->
+    <div class="dash-header">
+      <div class="user-info">
+        <h2>Halo, BossBuilder! 👋</h2>
+        <span class="level">🥈 SILVER TIER</span>
+      </div>
+    </div>
+    
+    <div class="dash-grid">
+      
+      <!-- Main Stats -->
+      <div class="card main-stats">
+        <div class="card-title">💰 Saldo Poin</div>
+        <div class="points-display" id="points-display">12,450</div>
+        <div class="points-sub">
+          <div class="points-sub-item">
+            <span class="points-sub-label">Kecepatan Nambang</span>
+            <span class="points-sub-value" id="mining-rate">15</span>
+            <span class="points-sub-label">poin/detik</span>
+          </div>
+          <div class="points-sub-item">
+            <span class="points-sub-label">Potensi Hari Ini</span>
+            <span class="points-sub-value" id="potential-today">+1,296,000</span>
+            <span class="points-sub-label">poin</span>
+          </div>
+          <div class="points-sub-item">
+            <span class="points-sub-label">Total Referral Bonus</span>
+            <span class="points-sub-value">+180</span>
+            <span class="points-sub-label">poin/jam</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Power Button -->
+      <div class="card power-section">
+        <div class="card-title">⚡ Daily Power-On</div>
+        <button class="power-btn" id="power-btn" onclick="togglePower()">
+          ON<br>POWER
+        </button>
+        <div class="power-status" id="power-status">
+          Status: OFF - Tekan untuk mengaktifkan nambang
+        </div>
+        <div style="margin-top:15px; font-size:13px; color:#888;">
+          Jendela ON: 06:00 - 12:00 WIB
+        </div>
+      </div>
+      
+      <!-- Tasks -->
+      <div class="card">
+        <div class="card-title">📋 Tugas Harian</div>
+        
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-name">✅ Login harian</div>
+            <div class="task-reward">+50 Poin</div>
+          </div>
+          <button class="task-btn done">Selesai</button>
+        </div>
+        
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-name">🐦 Share di Twitter</div>
+            <div class="task-reward">+100 Poin</div>
+          </div>
+          <button class="task-btn" onclick="completeTask(this, 100)">Kerjakan</button>
+        </div>
+        
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-name">📖 Baca artikel baru</div>
+            <div class="task-reward">+200 Poin</div>
+          </div>
+          <button class="task-btn" onclick="completeTask(this, 200)">Kerjakan</button>
+        </div>
+        
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-name">🎥 Tonton video edukasi</div>
+            <div class="task-reward">+200 Poin</div>
+          </div>
+          <button class="task-btn" onclick="completeTask(this, 200)">Kerjakan</button>
+        </div>
+      </div>
+      
+      <!-- Referrals -->
+      <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-title">👥 Tim Saya</div>
+        
+        <div class="ref-summary">
+          <div class="ref-stat">
+            <div class="ref-stat-value">15</div>
+            <div class="ref-stat-label">Total Referral</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-stat-value" style="color:#00ff88;">12</div>
+            <div class="ref-stat-label">Aktif Hari Ini</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-stat-value" style="color:#ff4444;">3</div>
+            <div class="ref-stat-label">Belum ON</div>
+          </div>
+        </div>
+        
+        <div class="ref-item active">
+          <div>
+            <div class="ref-name">🟢 Budi Santoso</div>
+            <div style="font-size:11px; color:#888;">ON sejak 06:02 • +10 poin/detik</div>
+          </div>
+          <div class="ref-status"><span class="status-dot active"></span> Aktif</div>
+        </div>
+        
+        <div class="ref-item active">
+          <div>
+            <div class="ref-name">🟢 Siti Aminah</div>
+            <div style="font-size:11px; color:#888;">ON sejak 06:15 • +10 poin/detik</div>
+          </div>
+          <div class="ref-status"><span class="status-dot active"></span> Aktif</div>
+        </div>
+        
+        <div class="ref-item late">
+          <div>
+            <div class="ref-name">🟡 Andi Pratama</div>
+            <div style="font-size:11px; color:#888;">ON jam 08:30 • Kehilangan 2.5 jam</div>
+          </div>
+          <div class="ref-status"><span class="status-dot late"></span> Telat</div>
+        </div>
+        
+        <div class="ref-item inactive">
+          <div>
+            <div class="ref-name">🔴 Rina Wati</div>
+            <div style="font-size:11px; color:#888;">Belum ON Power hari ini</div>
+          </div>
+          <button class="btn-remind" onclick="remindUser('Rina')">🔔 Ingatkan</button>
+        </div>
+        
+        <div class="ref-item inactive">
+          <div>
+            <div class="ref-name">🔴 Doni Saputra</div>
+            <div style="font-size:11px; color:#888;">Belum ON Power hari ini</div>
+          </div>
+          <button class="btn-remind" onclick="remindUser('Doni')">🔔 Ingatkan</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <footer>
+    <p>© 2026 BossX Dashboard. Reward Per Detik.</p>
+  </footer>
+</div>
+
+<script>
+  // ============ PAGE NAVIGATION ============
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  
+  // ============ COUNTDOWN TO 06:00 ============
+  function updateCountdown() {
+    const now = new Date();
+    const target = new Date();
+    target.setHours(6, 0, 0, 0);
+    
+    // Jika sudah lewat jam 6 pagi, target besok jam 6
+    if (now > target) {
+      target.setDate(target.getDate() + 1);
+    }
+    
+    const diff = target - now;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('countdown').textContent = 
+      `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+  
+  // ============ LIVE STATS ANIMATION ============
+  function animateStats() {
+    const usersEl = document.getElementById('stat-users');
+    const pointsEl = document.getElementById('stat-points');
+    const activeEl = document.getElementById('stat-active');
+    
+    let users = 47823;
+    let points = 12547890;
+    let active = 31245;
+    
+    setInterval(() => {
+      users += Math.floor(Math.random() * 3);
+      points += Math.floor(Math.random() * 5000) + 1000;
+      active += Math.floor(Math.random() * 5) - 2;
+      
+      if (usersEl) usersEl.textContent = users.toLocaleString('id-ID');
+      if (pointsEl) pointsEl.textContent = points.toLocaleString('id-ID');
+      if (activeEl) activeEl.textContent = active.toLocaleString('id-ID');
+    }, 1500);
+  }
+  animateStats();
+  
+  // ============ POINTS MINING (REAL-TIME) ============
+  let currentPoints = 12450;
+  let miningRate = 15; // poin per detik
+  let isPowerOn = false;
+  
+  function updatePointsDisplay() {
+    document.getElementById('points-display').textContent = 
+      Math.floor(currentPoints).toLocaleString('id-ID');
+  }
+  
+  setInterval(() => {
+    if (isPowerOn) {
+      currentPoints += miningRate;
+      updatePointsDisplay();
+    }
+  }, 1000);
+  
+  // ============ POWER BUTTON ============
+  function togglePower() {
+    const btn = document.getElementById('power-btn');
+    const status = document.getElementById('power-status');
+    const alertSuccess = document.getElementById('alert-success');
+    
+    isPowerOn = !isPowerOn;
+    
+    if (isPowerOn) {
+      btn.classList.add('active');
+      btn.innerHTML = 'ACTIVE<br>⚡';
+      status.textContent = 'Status: AKTIF - Nambang berjalan...';
+      status.classList.add('active');
+      
+      // Show success alert
+      alertSuccess.style.display = 'block';
+      setTimeout(() => { alertSuccess.style.display = 'none'; }, 3000);
+    } else {
+      btn.classList.remove('active');
+      btn.innerHTML = 'ON<br>POWER';
+      status.textContent = 'Status: OFF - Tekan untuk mengaktifkan nambang';
+      status.classList.remove('active');
+    }
+  }
+  
+  // ============ COMPLETE TASK ============
+  function completeTask(btn, reward) {
+    currentPoints += reward;
+    updatePointsDisplay();
+    btn.textContent = 'Selesai';
+    btn.classList.add('done');
+    btn.disabled = true;
+  }
+  
+  // ============ REMIND USER ============
+  function remindUser(name) {
+    alert(`✅ Notifikasi terkirim ke ${name}!\n\n"⚡ BossX Alert: Siklus baru dimulai! Tekan tombol ON Power sekarang juga!"`);
+  }
+  
+  // ============ SHOW LATE ALERT ON LOAD (DEMO) ============
+  // Uncomment baris di bawah untuk melihat alert "terlambat"
+  // document.getElementById('alert-late').classList.add('show');
+</script>
+
+</body>
+</html>
