@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0a0f">
-<title>BossX Mobile - Reward Per Detik</title>
+<title>BossX Mining - Animasi Tambang</title>
 <style>
   /* ============ RESET & BASE ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #1a1a2e;
+    background: #0a0a0f;
     color: #fff;
-    overflow-x: hidden;
+    overflow: hidden;
     height: 100%;
   }
   
-  /* ============ PHONE FRAME (untuk preview di desktop) ============ */
+  /* ============ PHONE FRAME ============ */
   .phone-wrapper {
     display: flex;
     justify-content: center;
@@ -33,14 +33,13 @@
     background: #0a0a0f;
     border-radius: 40px;
     border: 8px solid #1a1a2e;
-    box-shadow: 0 0 60px rgba(255,215,0,0.2), 0 0 100px rgba(0,255,136,0.1);
+    box-shadow: 0 0 60px rgba(255,215,0,0.2);
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
   }
   
-  /* Notch */
   .notch {
     position: absolute;
     top: 0;
@@ -64,7 +63,6 @@
     background: #0a0a0f;
     flex-shrink: 0;
   }
-  .status-icons { display: flex; gap: 5px; align-items: center; }
   
   /* ============ APP HEADER ============ */
   .app-header {
@@ -82,144 +80,233 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .header-icons { display: flex; gap: 15px; align-items: center; }
-  .icon-btn {
-    width: 36px; height: 36px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    position: relative;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-  }
-  .notif-badge {
-    position: absolute;
-    top: -2px; right: -2px;
-    width: 16px; height: 16px;
-    background: #ff4444;
-    border-radius: 50%;
-    font-size: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: bold;
-  }
   
-  /* ============ CONTENT AREA ============ */
-  .content {
+  /* ============ MINING AREA ============ */
+  .mining-area {
     flex: 1;
-    overflow-y: auto;
-    padding-bottom: 80px;
-    scroll-behavior: smooth;
-  }
-  .content::-webkit-scrollbar { display: none; }
-  
-  .screen { display: none; padding: 10px 20px 20px; }
-  .screen.active { display: block; animation: fadeIn 0.3s; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* ============ HOME SCREEN ============ */
-  .greeting {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 3px;
-  }
-  .username {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  /* Balance Card */
-  .balance-card {
-    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff6b00 100%);
-    border-radius: 20px;
-    padding: 20px;
-    color: #000;
     position: relative;
     overflow: hidden;
-    margin-bottom: 20px;
+    background: radial-gradient(ellipse at center bottom, #2a1a0a 0%, #0a0a0f 70%);
   }
-  .balance-card::before {
-    content: '';
+  
+  /* Background particles */
+  .bg-particles {
     position: absolute;
-    top: -50%; right: -30%;
-    width: 200px; height: 200px;
-    background: rgba(255,255,255,0.15);
+    inset: 0;
+    overflow: hidden;
+  }
+  .bg-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(255,215,0,0.3);
     border-radius: 50%;
+    animation: float 8s infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+  }
+  
+  /* Rock/Ground */
+  .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(180deg, transparent 0%, #1a0f05 30%, #2a1a0a 100%);
+  }
+  .rock {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 120px;
+  }
+  
+  /* Pickaxe */
+  .pickaxe-container {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    z-index: 10;
+  }
+  .pickaxe {
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 90%;
+    transition: transform 0.1s;
+  }
+  .pickaxe.swinging {
+    animation: pickaxeSwing 0.8s ease-in-out infinite;
+  }
+  @keyframes pickaxeSwing {
+    0%, 100% { transform: rotate(-30deg); }
+    50% { transform: rotate(30deg); }
+  }
+  
+  /* Impact effect */
+  .impact {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .impact.active {
+    animation: impactFlash 0.3s ease-out;
+  }
+  @keyframes impactFlash {
+    0% { opacity: 1; transform: translateX(-50%) scale(0.5); }
+    100% { opacity: 0; transform: translateX(-50%) scale(1.5); }
+  }
+  
+  /* Particles */
+  .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #ffd700, #ff8c00);
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(255,215,0,0.8);
+  }
+  .particle.animate {
+    animation: particleFly 1s ease-out forwards;
+  }
+  @keyframes particleFly {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  /* Coin popup */
+  .coin-popup {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffd700;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(255,215,0,0.8);
+    animation: coinFloat 1.5s ease-out forwards;
+  }
+  @keyframes coinFloat {
+    0% {
+      transform: translateY(0) scale(0.5);
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(-20px) scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  /* Spark effect */
+  .spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 8px #ffd700;
+  }
+  .spark.animate {
+    animation: sparkFly 0.5s ease-out forwards;
+  }
+  @keyframes sparkFly {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--sx), var(--sy)) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  /* ============ BALANCE DISPLAY ============ */
+  .balance-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 20;
+  }
+  .balance-card {
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
   }
   .balance-label {
-    font-size: 12px;
-    opacity: 0.8;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 5px;
-    position: relative;
   }
   .balance-amount {
     font-size: 32px;
     font-weight: 900;
+    color: #ffd700;
     font-family: 'Courier New', monospace;
-    position: relative;
-    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
   }
-  .balance-stats {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0,0,0,0.15);
-  }
-  .balance-stat-item {
-    display: flex;
-    flex-direction: column;
-  }
-  .balance-stat-label {
-    font-size: 10px;
-    opacity: 0.7;
-  }
-  .balance-stat-value {
-    font-size: 14px;
-    font-weight: bold;
+  .balance-rate {
+    font-size: 13px;
+    color: #00ff88;
+    margin-top: 5px;
   }
   
-  /* Power Button */
-  .power-container {
+  /* ============ POWER BUTTON ============ */
+  .power-overlay {
+    position: absolute;
+    bottom: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
     text-align: center;
-    margin: 20px 0;
-    padding: 20px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 20px;
-    border: 1px solid rgba(255,215,0,0.1);
-  }
-  .power-label {
-    font-size: 12px;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
   }
   .power-btn {
-    width: 140px;
-    height: 140px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, #00ff88, #008855);
     border: none;
     color: #000;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 0 40px rgba(0,255,136,0.4), inset 0 -5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 40px rgba(0,255,136,0.4);
     transition: all 0.3s;
     position: relative;
-    margin: 0 auto;
-    display: block;
   }
   .power-btn::before {
     content: '';
     position: absolute;
-    inset: -10px;
+    inset: -8px;
     border-radius: 50%;
     border: 2px solid rgba(0,255,136,0.3);
     animation: ripple 2s infinite;
@@ -230,380 +317,53 @@
   }
   .power-btn.active {
     background: radial-gradient(circle at 30% 30%, #ffd700, #cc8800);
-    box-shadow: 0 0 60px rgba(255,215,0,0.6), inset 0 -5px 15px rgba(0,0,0,0.2);
-    animation: pulseGold 2s infinite;
+    box-shadow: 0 0 60px rgba(255,215,0,0.6);
   }
   .power-btn.active::before {
     border-color: rgba(255,215,0,0.4);
   }
-  @keyframes pulseGold {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
   .power-status {
-    margin-top: 15px;
-    font-size: 13px;
+    margin-top: 10px;
+    font-size: 12px;
     color: #00ff88;
     font-weight: 600;
   }
   .power-status.off { color: #888; }
   
-  /* Countdown */
+  /* ============ COUNTDOWN ============ */
+  .countdown-overlay {
+    position: absolute;
+    bottom: 150px;
+    left: 20px;
+    right: 20px;
+    z-index: 20;
+  }
   .countdown-card {
-    background: rgba(255,215,0,0.05);
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255,215,0,0.2);
     border-radius: 15px;
-    padding: 15px;
+    padding: 12px;
     text-align: center;
-    margin-bottom: 20px;
   }
   .countdown-label {
-    font-size: 11px;
+    font-size: 10px;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
   .countdown-time {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: #ffd700;
     font-family: 'Courier New', monospace;
   }
-  
-  /* Quick Actions */
-  .quick-actions {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .quick-action {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 15px;
-    padding: 15px 5px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .quick-action:active { transform: scale(0.95); background: rgba(255,255,255,0.08); }
-  .quick-action-icon {
-    font-size: 22px;
-    margin-bottom: 5px;
-  }
-  .quick-action-label {
-    font-size: 10px;
-    color: #aaa;
-  }
-  
-  /* Section Title */
-  .section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 12px;
-  }
-  .section-title h3 {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  .section-title a {
-    font-size: 12px;
-    color: #ffd700;
-    text-decoration: none;
-  }
-  
-  /* Task Item */
-  .task-item {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 15px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .task-item:active { transform: scale(0.98); }
-  .task-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(0,255,136,0.1));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .task-info { flex: 1; min-width: 0; }
-  .task-name {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .task-reward {
-    font-size: 11px;
-    color: #00ff88;
-  }
-  .task-btn {
-    padding: 6px 14px;
-    background: linear-gradient(90deg, #ffd700, #ff8c00);
-    color: #000;
-    border: none;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .task-btn.done {
-    background: rgba(0,255,136,0.1);
-    color: #00ff88;
-  }
-  
-  /* ============ TEAM SCREEN ============ */
-  .team-summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .team-stat {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 15px;
-    padding: 15px 10px;
-    text-align: center;
-  }
-  .team-stat-value {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .team-stat-label {
-    font-size: 10px;
-    color: #888;
-    text-transform: uppercase;
-  }
-  
-  .ref-item {
-    background: rgba(255,255,255,0.03);
-    border-radius: 15px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-    border-left: 3px solid;
-  }
-  .ref-item.active { border-left-color: #00ff88; }
-  .ref-item.late { border-left-color: #ffaa00; }
-  .ref-item.inactive { border-left-color: #ff4444; }
-  
-  .ref-avatar {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: bold;
-    color: #000;
-    flex-shrink: 0;
-  }
-  .ref-info { flex: 1; min-width: 0; }
-  .ref-name {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .ref-detail {
-    font-size: 11px;
-    color: #888;
-  }
-  .ref-status {
-    font-size: 10px;
-    padding: 4px 10px;
-    border-radius: 10px;
-    font-weight: bold;
-    flex-shrink: 0;
-  }
-  .ref-status.active { background: rgba(0,255,136,0.15); color: #00ff88; }
-  .ref-status.late { background: rgba(255,170,0,0.15); color: #ffaa00; }
-  .ref-status.inactive { background: rgba(255,68,68,0.15); color: #ff4444; }
-  
-  .btn-remind {
-    padding: 6px 12px;
-    background: transparent;
-    border: 1px solid #ffd700;
-    color: #ffd700;
-    border-radius: 15px;
-    font-size: 11px;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  
-  /* Referral Link Card */
-  .ref-link-card {
-    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,255,136,0.05));
-    border: 1px solid rgba(255,215,0,0.3);
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .ref-link-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  .ref-link-box {
-    background: rgba(0,0,0,0.3);
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 11px;
-    color: #ffd700;
-    font-family: 'Courier New', monospace;
-    margin-bottom: 12px;
-    word-break: break-all;
-  }
-  .btn-copy {
-    padding: 10px 25px;
-    background: linear-gradient(90deg, #ffd700, #ff8c00);
-    color: #000;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 13px;
-  }
-  
-  /* ============ PROFILE SCREEN ============ */
-  .profile-header {
-    text-align: center;
-    padding: 20px 0;
-  }
-  .profile-avatar {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    font-weight: bold;
-    color: #000;
-    margin: 0 auto 15px;
-    border: 3px solid rgba(255,215,0,0.3);
-  }
-  .profile-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  .profile-level {
-    display: inline-block;
-    padding: 4px 15px;
-    background: linear-gradient(90deg, #c0c0c0, #808080);
-    border-radius: 15px;
-    font-size: 12px;
-    color: #000;
-    font-weight: bold;
-  }
-  
-  .profile-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 20px 0;
-  }
-  .profile-stat {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
-  }
-  .profile-stat-value {
-    font-size: 20px;
-    font-weight: bold;
-    color: #ffd700;
-    margin-bottom: 3px;
-  }
-  .profile-stat-label {
-    font-size: 11px;
-    color: #888;
-  }
-  
-  .menu-list {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 15px;
-    overflow: hidden;
-  }
-  .menu-item {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer;
-  }
-  .menu-item:last-child { border-bottom: none; }
-  .menu-item:active { background: rgba(255,255,255,0.05); }
-  .menu-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    background: rgba(255,215,0,0.1);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-  .menu-label { flex: 1; font-size: 14px; }
-  .menu-arrow { color: #555; }
-  
-  /* ============ BOTTOM NAVIGATION ============ */
-  .bottom-nav {
-    position: absolute;
-    bottom: 0;
-    left: 0; right: 0;
-    background: rgba(10,10,15,0.98);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255,215,0,0.15);
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0 15px;
-    flex-shrink: 0;
-  }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    cursor: pointer;
-    padding: 5px 15px;
-    border-radius: 15px;
-    transition: all 0.2s;
-    background: transparent;
-    border: none;
-    color: #666;
-    font-size: 10px;
-  }
-  .nav-item.active {
-    color: #ffd700;
-  }
-  .nav-item.active .nav-icon {
-    background: rgba(255,215,0,0.15);
-    color: #ffd700;
-  }
-  .nav-icon {
-    font-size: 20px;
-    padding: 8px 15px;
-    border-radius: 12px;
-    transition: all 0.2s;
-  }
-  .nav-label { font-weight: 600; }
   
   /* ============ TOAST ============ */
   .toast {
     position: absolute;
-    top: 60px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
     background: rgba(0,255,136,0.95);
@@ -618,7 +378,7 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
   
-  /* ============ RESPONSIVE (untuk HP asli) ============ */
+  /* ============ RESPONSIVE ============ */
   @media (max-width: 480px) {
     .phone-wrapper { padding: 0; background: #0a0a0f; }
     .phone-frame {
@@ -642,7 +402,7 @@
     <!-- Status Bar -->
     <div class="status-bar">
       <span id="time">09:41</span>
-      <div class="status-icons">
+      <div>
         <span>📶</span>
         <span>📡</span>
         <span>🔋</span>
@@ -651,375 +411,89 @@
     
     <!-- App Header -->
     <div class="app-header">
-      <div class="logo-mobile">⚡ BOSSX</div>
-      <div class="header-icons">
-        <button class="icon-btn">🔍</button>
-        <button class="icon-btn">
-          🔔
-          <span class="notif-badge">3</span>
-        </button>
-      </div>
+      <div class="logo-mobile">⚡ BOSSX MINING</div>
     </div>
     
-    <!-- Content -->
-    <div class="content">
+    <!-- Mining Area -->
+    <div class="mining-area" id="mining-area">
       
-      <!-- ============ HOME SCREEN ============ -->
-      <div id="screen-home" class="screen active">
-        
-        <div class="greeting">Selamat Pagi 👋</div>
-        <div class="username">BossBuilder</div>
-        
-        <!-- Balance Card -->
+      <!-- Background Particles -->
+      <div class="bg-particles" id="bg-particles"></div>
+      
+      <!-- Balance Display -->
+      <div class="balance-overlay">
         <div class="balance-card">
-          <div class="balance-label">💰 Total Poin Kamu</div>
-          <div class="balance-amount" id="balance-amount">12,450</div>
-          <div class="balance-stats">
-            <div class="balance-stat-item">
-              <span class="balance-stat-label">Kecepatan</span>
-              <span class="balance-stat-value" id="mining-rate">+15/detik</span>
-            </div>
-            <div class="balance-stat-item">
-              <span class="balance-stat-label">Hari Ini</span>
-              <span class="balance-stat-value" id="today-earned">+8,450</span>
-            </div>
-            <div class="balance-stat-item">
-              <span class="balance-stat-label">Estimasi Token</span>
-              <span class="balance-stat-value">≈ 12.4 $BOSSX</span>
-            </div>
-          </div>
+          <div class="balance-label">💰 Total Poin</div>
+          <div class="balance-amount" id="balance-amount">0</div>
+          <div class="balance-rate" id="balance-rate">+0/detik</div>
         </div>
-        
-        <!-- Power Button -->
-        <div class="power-container">
-          <div class="power-label">⚡ Daily Power-On</div>
-          <button class="power-btn" id="power-btn" onclick="togglePower()">
-            ON<br>POWER
-          </button>
-          <div class="power-status off" id="power-status">Tekan untuk mulai nambang</div>
-        </div>
-        
-        <!-- Countdown -->
+      </div>
+      
+      <!-- Pickaxe -->
+      <div class="pickaxe-container">
+        <svg class="pickaxe" id="pickaxe" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Handle -->
+          <rect x="47" y="40" width="6" height="50" fill="#8B4513" rx="2"/>
+          <rect x="48" y="42" width="4" height="48" fill="#A0522D" rx="1"/>
+          
+          <!-- Head -->
+          <path d="M 20 30 L 50 40 L 80 30 L 75 35 L 50 45 L 25 35 Z" 
+                fill="#C0C0C0" stroke="#808080" stroke-width="1"/>
+          <path d="M 20 30 L 50 40 L 50 45 L 25 35 Z" fill="#A8A8A8"/>
+          <path d="M 50 40 L 80 30 L 75 35 L 50 45 Z" fill="#D3D3D3"/>
+          
+          <!-- Shine -->
+          <ellipse cx="35" cy="35" rx="8" ry="3" fill="rgba(255,255,255,0.4)"/>
+          <ellipse cx="65" cy="35" rx="8" ry="3" fill="rgba(255,255,255,0.4)"/>
+        </svg>
+      </div>
+      
+      <!-- Impact Effect -->
+      <div class="impact" id="impact">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="40" fill="rgba(255,215,0,0.3)"/>
+          <circle cx="50" cy="50" r="25" fill="rgba(255,215,0,0.5)"/>
+        </svg>
+      </div>
+      
+      <!-- Ground & Rock -->
+      <div class="ground"></div>
+      <svg class="rock" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 30 80 L 50 40 L 90 30 L 130 40 L 150 80 L 140 100 L 40 100 Z" 
+              fill="#3a2a1a" stroke="#2a1a0a" stroke-width="2"/>
+        <path d="M 50 40 L 90 30 L 90 60 L 50 70 Z" fill="#4a3a2a"/>
+        <path d="M 90 30 L 130 40 L 130 70 L 90 60 Z" fill="#2a1a0a"/>
+        <!-- Gold veins -->
+        <circle cx="70" cy="55" r="4" fill="#ffd700" opacity="0.6"/>
+        <circle cx="110" cy="60" r="3" fill="#ffd700" opacity="0.6"/>
+        <circle cx="90" cy="75" r="5" fill="#ffd700" opacity="0.6"/>
+      </svg>
+      
+      <!-- Power Button -->
+      <div class="power-overlay">
+        <button class="power-btn" id="power-btn" onclick="togglePower()">
+          ON<br>POWER
+        </button>
+        <div class="power-status off" id="power-status">Tekan untuk mulai menambang</div>
+      </div>
+      
+      <!-- Countdown -->
+      <div class="countdown-overlay">
         <div class="countdown-card">
           <div class="countdown-label">⏰ Siklus Berikutnya</div>
           <div class="countdown-time" id="countdown">--:--:--</div>
         </div>
-        
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-          <div class="quick-action" onclick="switchTab(1)">
-            <div class="quick-action-icon">🎁</div>
-            <div class="quick-action-label">Tugas</div>
-          </div>
-          <div class="quick-action" onclick="switchTab(2)">
-            <div class="quick-action-icon">👥</div>
-            <div class="quick-action-label">Tim</div>
-          </div>
-          <div class="quick-action">
-            <div class="quick-action-icon">🔄</div>
-            <div class="quick-action-label">Konversi</div>
-          </div>
-          <div class="quick-action">
-            <div class="quick-action-icon">📈</div>
-            <div class="quick-action-label">Stake</div>
-          </div>
-        </div>
-        
-        <!-- Today's Tasks -->
-        <div class="section-title">
-          <h3>📋 Tugas Harian</h3>
-          <a href="#" onclick="switchTab(1); return false;">Lihat Semua</a>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 50)">
-          <div class="task-icon">✅</div>
-          <div class="task-info">
-            <div class="task-name">Login Harian</div>
-            <div class="task-reward">+50 Poin</div>
-          </div>
-          <button class="task-btn done">Selesai</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 100)">
-          <div class="task-icon">🐦</div>
-          <div class="task-info">
-            <div class="task-name">Share di Twitter</div>
-            <div class="task-reward">+100 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 200)">
-          <div class="task-icon">📖</div>
-          <div class="task-info">
-            <div class="task-name">Baca Whitepaper</div>
-            <div class="task-reward">+200 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-      </div>
-      
-      <!-- ============ TASKS SCREEN ============ -->
-      <div id="screen-tasks" class="screen">
-        <h2 style="font-size:22px; margin-bottom:15px;">🎁 Pusat Tugas</h2>
-        
-        <div class="section-title">
-          <h3>Tugas Sosial</h3>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 100)">
-          <div class="task-icon">📱</div>
-          <div class="task-info">
-            <div class="task-name">Join Telegram</div>
-            <div class="task-reward">+100 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 100)">
-          <div class="task-icon">🐦</div>
-          <div class="task-info">
-            <div class="task-name">Follow Twitter</div>
-            <div class="task-reward">+100 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 150)">
-          <div class="task-icon">🔄</div>
-          <div class="task-info">
-            <div class="task-name">Retweet Post Terbaru</div>
-            <div class="task-reward">+150 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="section-title">
-          <h3>Tugas Edukasi</h3>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 200)">
-          <div class="task-icon">🎥</div>
-          <div class="task-info">
-            <div class="task-name">Tonton Video BossX</div>
-            <div class="task-reward">+200 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 300)">
-          <div class="task-icon">📖</div>
-          <div class="task-info">
-            <div class="task-name">Baca Whitepaper</div>
-            <div class="task-reward">+300 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-        <div class="task-item" onclick="completeTask(this, 500)">
-          <div class="task-icon">⛓️</div>
-          <div class="task-info">
-            <div class="task-name">Transaksi On-Chain Pertama</div>
-            <div class="task-reward">+500 Poin</div>
-          </div>
-          <button class="task-btn">Kerjakan</button>
-        </div>
-        
-      </div>
-      
-      <!-- ============ TEAM SCREEN ============ -->
-      <div id="screen-team" class="screen">
-        <h2 style="font-size:22px; margin-bottom:15px;">👥 Tim Saya</h2>
-        
-        <!-- Referral Link -->
-        <div class="ref-link-card">
-          <div class="ref-link-title">🔗 Link Referral Kamu</div>
-          <div class="ref-link-box">bossx.io/ref/bossbuilder2026</div>
-          <button class="btn-copy" onclick="copyLink()">📋 Salin Link</button>
-        </div>
-        
-        <!-- Team Stats -->
-        <div class="team-summary">
-          <div class="team-stat">
-            <div class="team-stat-value" style="color:#ffd700;">15</div>
-            <div class="team-stat-label">Total</div>
-          </div>
-          <div class="team-stat">
-            <div class="team-stat-value" style="color:#00ff88;">12</div>
-            <div class="team-stat-label">Aktif</div>
-          </div>
-          <div class="team-stat">
-            <div class="team-stat-value" style="color:#ff4444;">3</div>
-            <div class="team-stat-label">Belum ON</div>
-          </div>
-        </div>
-        
-        <div class="section-title">
-          <h3>Daftar Referral</h3>
-        </div>
-        
-        <div class="ref-item active">
-          <div class="ref-avatar">BS</div>
-          <div class="ref-info">
-            <div class="ref-name">Budi Santoso</div>
-            <div class="ref-detail">ON sejak 06:02 • Level 1</div>
-          </div>
-          <span class="ref-status active">AKTIF</span>
-        </div>
-        
-        <div class="ref-item active">
-          <div class="ref-avatar">SA</div>
-          <div class="ref-info">
-            <div class="ref-name">Siti Aminah</div>
-            <div class="ref-detail">ON sejak 06:15 • Level 1</div>
-          </div>
-          <span class="ref-status active">AKTIF</span>
-        </div>
-        
-        <div class="ref-item late">
-          <div class="ref-avatar">AP</div>
-          <div class="ref-info">
-            <div class="ref-name">Andi Pratama</div>
-            <div class="ref-detail">ON jam 08:30 • Telat 2.5 jam</div>
-          </div>
-          <span class="ref-status late">TELAT</span>
-        </div>
-        
-        <div class="ref-item inactive">
-          <div class="ref-avatar">RW</div>
-          <div class="ref-info">
-            <div class="ref-name">Rina Wati</div>
-            <div class="ref-detail">Belum ON hari ini</div>
-          </div>
-          <button class="btn-remind" onclick="remindUser('Rina')">🔔</button>
-        </div>
-        
-        <div class="ref-item inactive">
-          <div class="ref-avatar">DS</div>
-          <div class="ref-info">
-            <div class="ref-name">Doni Saputra</div>
-            <div class="ref-detail">Belum ON hari ini</div>
-          </div>
-          <button class="btn-remind" onclick="remindUser('Doni')">🔔</button>
-        </div>
-        
-        <div class="ref-item inactive">
-          <div class="ref-avatar">ML</div>
-          <div class="ref-info">
-            <div class="ref-name">Maya Lestari</div>
-            <div class="ref-detail">Belum ON hari ini</div>
-          </div>
-          <button class="btn-remind" onclick="remindUser('Maya')">🔔</button>
-        </div>
-        
-      </div>
-      
-      <!-- ============ PROFILE SCREEN ============ -->
-      <div id="screen-profile" class="screen">
-        
-        <div class="profile-header">
-          <div class="profile-avatar">BB</div>
-          <div class="profile-name">BossBuilder</div>
-          <span class="profile-level">🥈 SILVER TIER</span>
-        </div>
-        
-        <div class="profile-stats">
-          <div class="profile-stat">
-            <div class="profile-stat-value">12,450</div>
-            <div class="profile-stat-label">Total Poin</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-value">15</div>
-            <div class="profile-stat-label">Total Referral</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-value">7</div>
-            <div class="profile-stat-label">Streak ON</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-value">12.4</div>
-            <div class="profile-stat-label">Est. $BOSSX</div>
-          </div>
-        </div>
-        
-        <div class="menu-list">
-          <div class="menu-item">
-            <div class="menu-icon">💼</div>
-            <div class="menu-label">Wallet Saya</div>
-            <div class="menu-arrow">›</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">🔄</div>
-            <div class="menu-label">Konversi Poin</div>
-            <div class="menu-arrow">›</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">📊</div>
-            <div class="menu-label">Riwayat Transaksi</div>
-            <div class="menu-arrow">›</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">🏆</div>
-            <div class="menu-label">Badge & Achievement</div>
-            <div class="menu-arrow">›</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">⚙️</div>
-            <div class="menu-label">Pengaturan</div>
-            <div class="menu-arrow">›</div>
-          </div>
-          <div class="menu-item">
-            <div class="menu-icon">❓</div>
-            <div class="menu-label">Bantuan & FAQ</div>
-            <div class="menu-arrow">›</div>
-          </div>
-        </div>
-        
       </div>
       
     </div>
     
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div class="toast" id="toast">✅ Berhasil!</div>
-    
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-      <button class="nav-item active" onclick="switchTab(0)">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-label">Home</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(1)">
-        <div class="nav-icon">🎁</div>
-        <div class="nav-label">Tugas</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(2)">
-        <div class="nav-icon">👥</div>
-        <div class="nav-label">Tim</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(3)">
-        <div class="nav-icon">👤</div>
-        <div class="nav-label">Profil</div>
-      </button>
-    </div>
     
   </div>
 </div>
 
 <script>
-  // ============ TAB SWITCHING ============
-  const screens = ['screen-home', 'screen-tasks', 'screen-team', 'screen-profile'];
-  
-  function switchTab(index) {
-    screens.forEach((id, i) => {
-      document.getElementById(id).classList.toggle('active', i === index);
-    });
-    document.querySelectorAll('.nav-item').forEach((item, i) => {
-      item.classList.toggle('active', i === index);
-    });
-    document.querySelector('.content').scrollTop = 0;
-  }
-  
   // ============ TIME DISPLAY ============
   function updateTime() {
     const now = new Date();
@@ -1048,69 +522,169 @@
   setInterval(updateCountdown, 1000);
   updateCountdown();
   
-  // ============ MINING ============
-  let currentPoints = 12450;
-  let todayEarned = 8450;
+  // ============ BACKGROUND PARTICLES ============
+  function createBgParticles() {
+    const container = document.getElementById('bg-particles');
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'bg-particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      container.appendChild(particle);
+    }
+  }
+  createBgParticles();
+  
+  // ============ MINING LOGIC ============
+  let currentPoints = 0;
   let isPowerOn = false;
+  let miningInterval = null;
   
   function updateBalance() {
     document.getElementById('balance-amount').textContent = 
       Math.floor(currentPoints).toLocaleString('id-ID');
-    document.getElementById('today-earned').textContent = 
-      '+' + Math.floor(todayEarned).toLocaleString('id-ID');
   }
   
-  setInterval(() => {
-    if (isPowerOn) {
-      currentPoints += 15;
-      todayEarned += 15;
-      updateBalance();
-    }
-  }, 1000);
-  
-  // ============ POWER BUTTON ============
   function togglePower() {
     const btn = document.getElementById('power-btn');
     const status = document.getElementById('power-status');
+    const pickaxe = document.getElementById('pickaxe');
     
     isPowerOn = !isPowerOn;
     
     if (isPowerOn) {
       btn.classList.add('active');
       btn.innerHTML = 'ACTIVE<br>⚡';
-      status.textContent = '🟢 Nambang aktif! +15/detik';
+      status.textContent = '🟢 Menambang aktif!';
       status.classList.remove('off');
-      showToast('⚡ Power ON! Nambang dimulai');
+      pickaxe.classList.add('swinging');
+      
+      // Start mining
+      miningInterval = setInterval(() => {
+        mineAction();
+      }, 800);
+      
+      showToast('⚡ Power ON! Menambang dimulai');
     } else {
       btn.classList.remove('active');
       btn.innerHTML = 'ON<br>POWER';
-      status.textContent = 'Tekan untuk mulai nambang';
+      status.textContent = 'Tekan untuk mulai menambang';
       status.classList.add('off');
+      pickaxe.classList.remove('swinging');
+      
+      // Stop mining
+      if (miningInterval) {
+        clearInterval(miningInterval);
+        miningInterval = null;
+      }
+      
       showToast('⏸️ Power OFF');
     }
   }
   
-  // ============ COMPLETE TASK ============
-  function completeTask(el, reward) {
-    const btn = el.querySelector('.task-btn');
-    if (btn.classList.contains('done')) return;
-    
-    currentPoints += reward;
-    todayEarned += reward;
+  function mineAction() {
+    // Add points
+    currentPoints += 15;
     updateBalance();
-    btn.textContent = 'Selesai';
-    btn.classList.add('done');
-    showToast(`+${reward} Poin ditambahkan!`);
+    
+    // Create particles
+    createParticles();
+    
+    // Create sparks
+    createSparks();
+    
+    // Create coin popup
+    createCoinPopup();
+    
+    // Impact effect
+    const impact = document.getElementById('impact');
+    impact.classList.remove('active');
+    void impact.offsetWidth; // Trigger reflow
+    impact.classList.add('active');
   }
   
-  // ============ REMIND USER ============
-  function remindUser(name) {
-    showToast(`🔔 Notifikasi dikirim ke ${name}`);
+  function createParticles() {
+    const miningArea = document.getElementById('mining-area');
+    const rect = miningArea.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height - 150;
+    
+    for (let i = 0; i < 8; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = centerX + 'px';
+      particle.style.top = centerY + 'px';
+      
+      const angle = (Math.PI * 2 * i) / 8;
+      const distance = 80 + Math.random() * 40;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance - 50;
+      
+      particle.style.setProperty('--tx', tx + 'px');
+      particle.style.setProperty('--ty', ty + 'px');
+      
+      miningArea.appendChild(particle);
+      
+      setTimeout(() => {
+        particle.classList.add('animate');
+      }, 10);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    }
   }
   
-  // ============ COPY LINK ============
-  function copyLink() {
-    showToast('📋 Link berhasil disalin!');
+  function createSparks() {
+    const miningArea = document.getElementById('mining-area');
+    const rect = miningArea.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height - 150;
+    
+    for (let i = 0; i < 6; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'spark';
+      spark.style.left = centerX + 'px';
+      spark.style.top = centerY + 'px';
+      
+      const angle = (Math.PI * 2 * i) / 6;
+      const distance = 50 + Math.random() * 30;
+      const sx = Math.cos(angle) * distance;
+      const sy = Math.sin(angle) * distance - 30;
+      
+      spark.style.setProperty('--sx', sx + 'px');
+      spark.style.setProperty('--sy', sy + 'px');
+      
+      miningArea.appendChild(spark);
+      
+      setTimeout(() => {
+        spark.classList.add('animate');
+      }, 10);
+      
+      setTimeout(() => {
+        spark.remove();
+      }, 500);
+    }
+  }
+  
+  function createCoinPopup() {
+    const miningArea = document.getElementById('mining-area');
+    const rect = miningArea.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height - 200;
+    
+    const popup = document.createElement('div');
+    popup.className = 'coin-popup';
+    popup.textContent = '+15';
+    popup.style.left = (centerX - 20 + Math.random() * 40) + 'px';
+    popup.style.top = centerY + 'px';
+    
+    miningArea.appendChild(popup);
+    
+    setTimeout(() => {
+      popup.remove();
+    }, 1500);
   }
   
   // ============ TOAST ============
