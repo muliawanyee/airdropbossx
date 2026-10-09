@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0a0f">
-<title>BossX - Cyber Node Mining</title>
+<title>BossXp - Airdrop Point Mining</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -77,16 +77,25 @@
     50% { transform: scale(1.1); opacity: 1; }
   }
   .loading-text {
-    font-size: 14px;
-    color: #ffd700;
+    font-size: 22px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #ffd700, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     letter-spacing: 3px;
+    margin-bottom: 5px;
+  }
+  .loading-subtext {
+    font-size: 10px;
+    color: #888;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    margin-bottom: 20px;
   }
   .loading-bar {
     width: 150px;
     height: 2px;
     background: rgba(255,215,0,0.2);
-    margin-top: 15px;
     border-radius: 2px;
     overflow: hidden;
   }
@@ -152,7 +161,7 @@
     position: relative;
   }
   .app-header {
-    padding: 12px 20px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -162,14 +171,34 @@
     position: relative;
     border-bottom: 1px solid rgba(255,215,0,0.1);
   }
-  .logo-mobile {
-    font-size: 20px;
+  
+  /* ============ BRAND LOGO + NAME ============ */
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.5));
+  }
+  .brand-name {
+    font-size: 22px;
     font-weight: 900;
     background: linear-gradient(90deg, #ffd700, #00ff88);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    line-height: 1;
   }
+  .brand-name .highlight {
+    color: #00ff88;
+    -webkit-text-fill-color: #00ff88;
+    font-style: italic;
+  }
+  
   .header-icons { display: flex; gap: 10px; }
   .icon-btn {
     width: 32px; height: 32px;
@@ -254,10 +283,7 @@
     border-radius: 50%;
     transition: all 0.3s;
   }
-  .status-dot.offline {
-    background: #666;
-    box-shadow: none;
-  }
+  .status-dot.offline { background: #666; box-shadow: none; }
   .status-dot.online {
     background: #00ff88;
     box-shadow: 0 0 10px #00ff88;
@@ -828,8 +854,9 @@
     
     <!-- Loading -->
     <div class="loading-overlay" id="loading-overlay">
-      <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossX" class="loading-logo">
-      <div class="loading-text">BOSSX</div>
+      <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossXp" class="loading-logo">
+      <div class="loading-text">BossXp</div>
+      <div class="loading-subtext">Airdrop Point Mining</div>
       <div class="loading-bar">
         <div class="loading-bar-fill"></div>
       </div>
@@ -849,9 +876,12 @@
       </div>
     </div>
     
-    <!-- App Header -->
+    <!-- App Header dengan LOGO + Nama Brand -->
     <div class="app-header">
-      <div class="logo-mobile">⚡ BOSSX</div>
+      <div class="brand-header">
+        <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossXp" class="brand-logo">
+        <div class="brand-name">Boss<span class="highlight">Xp</span></div>
+      </div>
       <div class="header-icons">
         <button class="icon-btn" onclick="playClickSound()">🔔</button>
       </div>
@@ -889,7 +919,7 @@
               </div>
             </div>
             
-            <!-- Auto Stop Countdown (dengan timer) -->
+            <!-- Auto Stop Countdown -->
             <div class="auto-stop-countdown">
               <div class="auto-stop-header">
                 <span class="auto-stop-label">Auto Stop In</span>
@@ -909,7 +939,7 @@
             
             <button class="core-node-btn" id="core-node-btn" onclick="togglePower()">
               <div class="logo-glow"></div>
-              <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossX Logo" class="core-logo">
+              <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossXp Logo" class="core-logo">
             </button>
             
             <div class="data-stream" id="stream-1" style="left: 20%;"></div>
@@ -933,7 +963,7 @@
             <div class="task-icon">📱</div>
             <div class="task-info">
               <div class="task-name">Join Telegram</div>
-              <div class="task-reward">+0.00005000 $BOSSX</div>
+              <div class="task-reward">+0.00005000 Xp</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
@@ -941,7 +971,7 @@
             <div class="task-icon">🐦</div>
             <div class="task-info">
               <div class="task-name">Follow Twitter</div>
-              <div class="task-reward">+0.00005000 $BOSSX</div>
+              <div class="task-reward">+0.00005000 Xp</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
@@ -949,8 +979,8 @@
           <div class="task-item" onclick="completeTask(this, 0.00010000)">
             <div class="task-icon">🎥</div>
             <div class="task-info">
-              <div class="task-name">Tonton Video BossX</div>
-              <div class="task-reward">+0.00010000 $BOSSX</div>
+              <div class="task-name">Tonton Video BossXp</div>
+              <div class="task-reward">+0.00010000 Xp</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
@@ -958,7 +988,7 @@
             <div class="task-icon">⛓️</div>
             <div class="task-info">
               <div class="task-name">Transaksi On-Chain Pertama</div>
-              <div class="task-reward">+0.00025000 $BOSSX</div>
+              <div class="task-reward">+0.00025000 Xp</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
@@ -971,7 +1001,7 @@
           <div class="screen-title">👥 Tim Saya</div>
           <div class="ref-link-card">
             <div class="ref-link-title">🔗 Link Referral Kamu</div>
-            <div class="ref-link-box">bossx.io/ref/bossbuilder2026</div>
+            <div class="ref-link-box">bossxp.io/ref/bossbuilder2026</div>
             <button class="btn-copy" onclick="copyLink()">📋 Salin Link</button>
           </div>
           <div class="team-summary">
@@ -1019,7 +1049,7 @@
           <div class="profile-stats">
             <div class="profile-stat">
               <div class="profile-stat-value" id="profile-points">0.00000000</div>
-              <div class="profile-stat-label">Total $BOSSX</div>
+              <div class="profile-stat-label">Total Xp</div>
             </div>
             <div class="profile-stat">
               <div class="profile-stat-value">15</div>
@@ -1042,7 +1072,7 @@
             </div>
             <div class="menu-item">
               <div class="menu-icon">🔄</div>
-              <div class="menu-label">Konversi ke Token</div>
+              <div class="menu-label">Konversi Xp ke Token</div>
               <div class="menu-arrow">›</div>
             </div>
             <div class="menu-item">
@@ -1211,7 +1241,7 @@
   updateTime();
   setInterval(updateTime, 1000);
   
-  // ============ AUTO STOP COUNTDOWN (menuju jam 06:00) ============
+  // ============ AUTO STOP COUNTDOWN ============
   let lastAutoStopCheck = null;
   
   function updateAutoStopCountdown() {
@@ -1219,7 +1249,6 @@
     const target = new Date();
     target.setHours(6, 0, 0, 0);
     
-    // Jika sudah lewat jam 6 pagi, target besok jam 6
     if (now > target) {
       target.setDate(target.getDate() + 1);
     }
@@ -1232,7 +1261,6 @@
     document.getElementById('countdown').textContent = 
       `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
     
-    // Progress bar (24 jam = 100%)
     const totalSecondsInCycle = 24 * 60 * 60;
     const elapsedSeconds = totalSecondsInCycle - (diff / 1000);
     const progress = (elapsedSeconds / totalSecondsInCycle) * 100;
@@ -1245,7 +1273,6 @@
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     
-    // Cek tepat jam 06:00:00
     if (hours === 6 && minutes === 0 && seconds === 0) {
       const checkKey = `${now.toDateString()}-06:00:00`;
       if (lastAutoStopCheck === checkKey) return;
@@ -1302,7 +1329,6 @@
     }, 3000);
   }
   
-  // Jalankan countdown & auto-stop checker setiap detik
   setInterval(() => {
     updateAutoStopCountdown();
     checkAutoStop();
@@ -1423,7 +1449,7 @@
     updateBalance();
     btn.textContent = '✓';
     btn.classList.add('done');
-    showToast(`+${formatNumber(reward)} $BOSSX`);
+    showToast(`+${formatNumber(reward)} Xp`);
   }
   
   function remindUser(name) {
