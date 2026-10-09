@@ -50,7 +50,7 @@
     z-index: 100;
   }
   
-  /* ============ LOADING SKELETON ============ */
+  /* ============ LOADING ============ */
   .loading-overlay {
     position: absolute;
     inset: 0;
@@ -184,7 +184,7 @@
   }
   .icon-btn:active { transform: scale(0.9); background: rgba(255,215,0,0.1); }
   
-  /* ============ SCREENS CONTAINER ============ */
+  /* ============ SCREENS ============ */
   .screens-container {
     flex: 1;
     position: relative;
@@ -269,7 +269,7 @@
   }
   
   .balance-amount {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 900;
     background: linear-gradient(90deg, #ffd700, #ffaa00);
     -webkit-background-clip: text;
@@ -278,6 +278,7 @@
     text-shadow: 0 0 30px rgba(255,215,0,0.3);
     margin-bottom: 12px;
     transition: text-shadow 0.5s;
+    letter-spacing: -1px;
   }
   .balance-card.active .balance-amount {
     text-shadow: 0 0 40px rgba(255,215,0,0.6);
@@ -299,52 +300,45 @@
     letter-spacing: 0.5px;
   }
   .balance-stat-value {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
     color: #00ff88;
+    font-family: 'Courier New', monospace;
   }
   
-  /* Next Cycle */
-  .next-cycle {
+  /* Auto Stop Info */
+  .auto-stop-info {
     padding-top: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .next-cycle-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .next-cycle-label {
+  .auto-stop-label {
     font-size: 10px;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
-  .next-cycle-time {
-    font-size: 16px;
+  .auto-stop-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #ff8c00;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff8c00;
+    animation: blink 2s infinite;
+  }
+  .auto-stop-time {
+    font-size: 12px;
     font-weight: bold;
-    color: #ffd700;
+    color: #ff8c00;
     font-family: 'Courier New', monospace;
-    text-shadow: 0 0 10px rgba(255,215,0,0.5);
-  }
-  .next-cycle-bar {
-    width: 100%;
-    height: 4px;
-    background: rgba(255,215,0,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .next-cycle-progress {
-    height: 100%;
-    background: linear-gradient(90deg, #00ff88, #ffd700);
-    border-radius: 2px;
-    transition: width 1s linear;
-    box-shadow: 0 0 10px rgba(255,215,0,0.5);
   }
   
-  /* ============ CYBER NODE WITH LOGO AS BUTTON ============ */
+  /* ============ CYBER NODE ============ */
   .node-container {
     position: relative;
     width: 280px;
@@ -390,7 +384,6 @@
   @keyframes rotate2 { to { transform: rotate(-360deg); } }
   @keyframes rotate3 { to { transform: rotate(360deg) rotateX(60deg); } }
   
-  /* Core Node Button */
   .core-node-btn {
     position: relative;
     width: 120px;
@@ -406,13 +399,8 @@
     cursor: pointer;
     outline: none;
   }
-  .core-node-btn:hover {
-    opacity: 0.6;
-    transform: scale(1.02);
-  }
-  .core-node-btn:active {
-    transform: scale(0.95);
-  }
+  .core-node-btn:hover { opacity: 0.6; transform: scale(1.02); }
+  .core-node-btn:active { transform: scale(0.95); }
   .core-node-btn.active {
     opacity: 1;
     box-shadow: 0 0 60px rgba(255,215,0,0.4), inset 0 0 30px rgba(255,215,0,0.1);
@@ -497,13 +485,8 @@
     transition: color 0.3s;
   }
   .status-text.active { color: #00ff88; }
-  .status-hint {
-    font-size: 11px;
-    color: #555;
-    margin-top: 5px;
-  }
   
-  /* ============ TASKS SCREEN ============ */
+  /* ============ TASKS ============ */
   .tasks-screen, .referral-screen, .profile-screen { padding: 20px; }
   .screen-title {
     font-size: 22px;
@@ -545,7 +528,11 @@
   }
   .task-info { flex: 1; min-width: 0; }
   .task-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .task-reward { font-size: 11px; color: #00ff88; }
+  .task-reward { 
+    font-size: 11px; 
+    color: #00ff88; 
+    font-family: 'Courier New', monospace;
+  }
   .task-btn {
     padding: 6px 14px;
     background: linear-gradient(90deg, #ffd700, #ff8c00);
@@ -565,7 +552,7 @@
     cursor: default;
   }
   
-  /* ============ REFERRAL SCREEN ============ */
+  /* ============ REFERRAL ============ */
   .ref-link-card {
     background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,255,136,0.05));
     border: 1px solid rgba(255,215,0,0.3);
@@ -667,7 +654,7 @@
   }
   .btn-remind:active { background: #ffd700; color: #000; }
   
-  /* ============ PROFILE SCREEN ============ */
+  /* ============ PROFILE ============ */
   .profile-header { text-align: center; padding: 15px 0 25px; }
   .profile-avatar {
     width: 80px; height: 80px;
@@ -705,7 +692,13 @@
     padding: 12px;
     text-align: center;
   }
-  .profile-stat-value { font-size: 18px; font-weight: bold; color: #ffd700; margin-bottom: 3px; }
+  .profile-stat-value { 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #ffd700; 
+    margin-bottom: 3px;
+    font-family: 'Courier New', monospace;
+  }
   .profile-stat-label { font-size: 10px; color: #888; }
   
   .menu-list {
@@ -735,7 +728,7 @@
   .menu-label { flex: 1; font-size: 13px; }
   .menu-arrow { color: #555; }
   
-  /* ============ BOTTOM NAVIGATION ============ */
+  /* ============ BOTTOM NAV ============ */
   .bottom-nav {
     background: rgba(10,10,15,0.98);
     backdrop-filter: blur(20px);
@@ -813,7 +806,7 @@
   <div class="phone-frame">
     <div class="notch"></div>
     
-    <!-- Loading Overlay -->
+    <!-- Loading -->
     <div class="loading-overlay" id="loading-overlay">
       <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossX" class="loading-logo">
       <div class="loading-text">BOSSX</div>
@@ -844,10 +837,10 @@
       </div>
     </div>
     
-    <!-- Screens Container -->
+    <!-- Screens -->
     <div class="screens-container">
       
-      <!-- HOME SCREEN -->
+      <!-- HOME -->
       <div id="screen-home" class="screen active">
         <div class="home-screen">
           
@@ -860,15 +853,15 @@
               </div>
               <div style="font-size:10px; color:#666;">TRC20</div>
             </div>
-            <div class="balance-amount" id="balance-amount">0.0000</div>
+            <div class="balance-amount" id="balance-amount">0.00000000</div>
             <div class="balance-stats">
               <div class="balance-stat">
                 <span class="balance-stat-label">Rate</span>
-                <span class="balance-stat-value" id="mining-rate">+0.0010/s</span>
+                <span class="balance-stat-value" id="mining-rate">+0.00000005/s</span>
               </div>
               <div class="balance-stat">
                 <span class="balance-stat-label">Today</span>
-                <span class="balance-stat-value" id="today-earned">+0.0000</span>
+                <span class="balance-stat-value" id="today-earned">+0.00000000</span>
               </div>
               <div class="balance-stat">
                 <span class="balance-stat-label">Est. USD</span>
@@ -876,14 +869,10 @@
               </div>
             </div>
             
-            <div class="next-cycle">
-              <div class="next-cycle-header">
-                <span class="next-cycle-label">⏰ Next Cycle</span>
-                <span class="next-cycle-time" id="countdown">--:--:--</span>
-              </div>
-              <div class="next-cycle-bar">
-                <div class="next-cycle-progress" id="cycle-progress" style="width: 0%;"></div>
-              </div>
+            <!-- Auto Stop Info (Pengganti Next Cycle) -->
+            <div class="auto-stop-info">
+              <span class="auto-stop-label">Auto Stop</span>
+              <span class="auto-stop-time">06:00 AM</span>
             </div>
           </div>
           
@@ -905,54 +894,53 @@
           
           <div class="node-status">
             <div class="status-text" id="status-text">Tap Logo to Activate</div>
-            <div class="status-hint">Tekan logo untuk mulai menambang</div>
           </div>
           
         </div>
       </div>
       
-      <!-- TASKS SCREEN -->
+      <!-- TASKS -->
       <div id="screen-tasks" class="screen">
         <div class="tasks-screen">
           <div class="screen-title">🎁 Pusat Tugas</div>
           <div class="section-title">Tugas Sosial</div>
-          <div class="task-item" onclick="completeTask(this, 0.05)">
+          <div class="task-item" onclick="completeTask(this, 0.00005000)">
             <div class="task-icon">📱</div>
             <div class="task-info">
               <div class="task-name">Join Telegram</div>
-              <div class="task-reward">+0.0500 $BOSSX</div>
+              <div class="task-reward">+0.00005000 $BOSSX</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
-          <div class="task-item" onclick="completeTask(this, 0.05)">
+          <div class="task-item" onclick="completeTask(this, 0.00005000)">
             <div class="task-icon">🐦</div>
             <div class="task-info">
               <div class="task-name">Follow Twitter</div>
-              <div class="task-reward">+0.0500 $BOSSX</div>
+              <div class="task-reward">+0.00005000 $BOSSX</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
           <div class="section-title">Tugas Edukasi</div>
-          <div class="task-item" onclick="completeTask(this, 0.10)">
+          <div class="task-item" onclick="completeTask(this, 0.00010000)">
             <div class="task-icon">🎥</div>
             <div class="task-info">
               <div class="task-name">Tonton Video BossX</div>
-              <div class="task-reward">+0.1000 $BOSSX</div>
+              <div class="task-reward">+0.00010000 $BOSSX</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
-          <div class="task-item" onclick="completeTask(this, 0.25)">
+          <div class="task-item" onclick="completeTask(this, 0.00025000)">
             <div class="task-icon">⛓️</div>
             <div class="task-info">
               <div class="task-name">Transaksi On-Chain Pertama</div>
-              <div class="task-reward">+0.2500 $BOSSX</div>
+              <div class="task-reward">+0.00025000 $BOSSX</div>
             </div>
             <button class="task-btn">Kerjakan</button>
           </div>
         </div>
       </div>
       
-      <!-- REFERRAL SCREEN -->
+      <!-- REFERRAL -->
       <div id="screen-referral" class="screen">
         <div class="referral-screen">
           <div class="screen-title">👥 Tim Saya</div>
@@ -995,7 +983,7 @@
         </div>
       </div>
       
-      <!-- PROFILE SCREEN -->
+      <!-- PROFILE -->
       <div id="screen-profile" class="screen">
         <div class="profile-screen">
           <div class="profile-header">
@@ -1005,7 +993,7 @@
           </div>
           <div class="profile-stats">
             <div class="profile-stat">
-              <div class="profile-stat-value" id="profile-points">0.0000</div>
+              <div class="profile-stat-value" id="profile-points">0.00000000</div>
               <div class="profile-stat-label">Total $BOSSX</div>
             </div>
             <div class="profile-stat">
@@ -1046,7 +1034,7 @@
     <!-- Toast -->
     <div class="toast" id="toast">✅ Node Activated</div>
     
-    <!-- Bottom Navigation -->
+    <!-- Bottom Nav -->
     <div class="bottom-nav">
       <button class="nav-item active" onclick="switchTab(0)">
         <div class="nav-icon">🏠</div>
@@ -1070,14 +1058,14 @@
 </div>
 
 <script>
-  // ============ LOADING SCREEN ============
+  // ============ LOADING ============
   window.addEventListener('load', () => {
     setTimeout(() => {
       document.getElementById('loading-overlay').classList.add('hidden');
     }, 2200);
   });
   
-  // ============ SOUND EFFECTS (Web Audio API) ============
+  // ============ SOUND EFFECTS ============
   let audioCtx = null;
   function getAudioContext() {
     if (!audioCtx) {
@@ -1120,6 +1108,24 @@
     } catch(e) {}
   }
   
+  function playAutoStopSound() {
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.setValueAtTime(600, ctx.currentTime + 0.15);
+      osc.frequency.setValueAtTime(400, ctx.currentTime + 0.3);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch(e) {}
+  }
+  
   function playClickSound() {
     try {
       const ctx = getAudioContext();
@@ -1154,11 +1160,8 @@
     } catch(e) {}
   }
   
-  // ============ HAPTIC FEEDBACK ============
   function vibrate(pattern) {
-    if (navigator.vibrate) {
-      navigator.vibrate(pattern);
-    }
+    if (navigator.vibrate) navigator.vibrate(pattern);
   }
   
   // ============ TAB SWITCHING ============
@@ -1167,19 +1170,14 @@
     playClickSound();
     vibrate(10);
     screens.forEach((id, i) => {
-      const screen = document.getElementById(id);
-      if (i === index) {
-        screen.classList.add('active');
-      } else {
-        screen.classList.remove('active');
-      }
+      document.getElementById(id).classList.toggle('active', i === index);
     });
     document.querySelectorAll('.nav-item').forEach((item, i) => {
       item.classList.toggle('active', i === index);
     });
   }
   
-  // ============ TIME & COUNTDOWN ============
+  // ============ TIME ============
   function updateTime() {
     const now = new Date();
     document.getElementById('time').textContent = 
@@ -1188,27 +1186,81 @@
   updateTime();
   setInterval(updateTime, 1000);
   
-  function updateCountdown() {
+  // ============ AUTO STOP CHECKER (06:00) ============
+  let lastAutoStopCheck = null;
+  
+  function checkAutoStop() {
     const now = new Date();
-    const target = new Date();
-    target.setHours(6, 0, 0, 0);
-    if (now > target) target.setDate(target.getDate() + 1);
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
     
-    const diff = target - now;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    
-    document.getElementById('countdown').textContent = 
-      `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-    
-    const totalSecondsInCycle = 24 * 60 * 60;
-    const elapsedSeconds = totalSecondsInCycle - (diff / 1000);
-    const progress = (elapsedSeconds / totalSecondsInCycle) * 100;
-    document.getElementById('cycle-progress').style.width = progress + '%';
+    // Cek tepat jam 06:00:00
+    if (hours === 6 && minutes === 0 && seconds === 0) {
+      // Cegah trigger berulang dalam detik yang sama
+      const checkKey = `${now.toDateString()}-06:00:00`;
+      if (lastAutoStopCheck === checkKey) return;
+      lastAutoStopCheck = checkKey;
+      
+      // Jika node aktif, auto stop
+      if (isPowerOn) {
+        autoStopNode();
+      }
+    }
   }
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
+  
+  function autoStopNode() {
+    // Sound & vibration khusus auto-stop
+    playAutoStopSound();
+    vibrate([100, 50, 100, 50, 100]);
+    
+    // Visual updates
+    const btn = document.getElementById('core-node-btn');
+    const statusText = document.getElementById('status-text');
+    const balanceCard = document.getElementById('balance-card');
+    const balanceLabel = document.getElementById('balance-label');
+    const statusDot = document.getElementById('status-dot');
+    const statusLabelText = document.getElementById('status-label-text');
+    
+    btn.classList.remove('active');
+    statusText.textContent = 'Auto Stopped - 06:00';
+    statusText.classList.remove('active');
+    
+    balanceCard.classList.remove('active');
+    balanceLabel.classList.remove('online');
+    balanceLabel.classList.add('offline');
+    statusDot.classList.remove('online');
+    statusDot.classList.add('offline');
+    statusLabelText.textContent = 'Node Offline';
+    
+    // Deactivate rings & streams
+    document.getElementById('ring-1').classList.remove('active');
+    document.getElementById('ring-2').classList.remove('active');
+    document.getElementById('ring-3').classList.remove('active');
+    document.getElementById('stream-1').classList.remove('active');
+    document.getElementById('stream-2').classList.remove('active');
+    document.getElementById('stream-3').classList.remove('active');
+    
+    // Stop mining
+    if (miningInterval) {
+      clearInterval(miningInterval);
+      miningInterval = null;
+    }
+    
+    isPowerOn = false;
+    
+    showToast('⏰ Auto Stop 06:00 - Siklus Baru Dimulai');
+    
+    // Reset status text setelah 3 detik
+    setTimeout(() => {
+      if (!isPowerOn) {
+        statusText.textContent = 'Tap Logo to Activate';
+      }
+    }, 3000);
+  }
+  
+  // Jalankan auto-stop checker setiap detik
+  setInterval(checkAutoStop, 1000);
   
   // ============ MATRIX PARTICLES ============
   function createMatrixParticles() {
@@ -1226,17 +1278,21 @@
   }
   createMatrixParticles();
   
-  // ============ MINING LOGIC ============
+  // ============ MINING LOGIC (0.00000005 per detik, 8 desimal) ============
   let currentPoints = 0;
   let todayEarned = 0;
   let isPowerOn = false;
   let miningInterval = null;
   
+  function formatNumber(num) {
+    return num.toFixed(8);
+  }
+  
   function updateBalance() {
-    document.getElementById('balance-amount').textContent = currentPoints.toFixed(4);
-    document.getElementById('today-earned').textContent = '+' + todayEarned.toFixed(4);
+    document.getElementById('balance-amount').textContent = formatNumber(currentPoints);
+    document.getElementById('today-earned').textContent = '+' + formatNumber(todayEarned);
     document.getElementById('est-usd').textContent = '$' + (currentPoints * 0.05).toFixed(2);
-    document.getElementById('profile-points').textContent = currentPoints.toFixed(4);
+    document.getElementById('profile-points').textContent = formatNumber(currentPoints);
   }
   
   function togglePower() {
@@ -1246,26 +1302,17 @@
     const balanceLabel = document.getElementById('balance-label');
     const statusDot = document.getElementById('status-dot');
     const statusLabelText = document.getElementById('status-label-text');
-    const ring1 = document.getElementById('ring-1');
-    const ring2 = document.getElementById('ring-2');
-    const ring3 = document.getElementById('ring-3');
-    const stream1 = document.getElementById('stream-1');
-    const stream2 = document.getElementById('stream-2');
-    const stream3 = document.getElementById('stream-3');
     
     isPowerOn = !isPowerOn;
     
     if (isPowerOn) {
-      // Sound & vibration
       playPowerOnSound();
       vibrate([30, 50, 30]);
       
-      // Visual updates
       btn.classList.add('active');
       statusText.textContent = 'Mining Active';
       statusText.classList.add('active');
       
-      // FIX: Update balance card status
       balanceCard.classList.add('active');
       balanceLabel.classList.remove('offline');
       balanceLabel.classList.add('online');
@@ -1273,33 +1320,29 @@
       statusDot.classList.add('online');
       statusLabelText.textContent = 'Node Active';
       
-      // Activate rings & streams
-      ring1.classList.add('active');
-      ring2.classList.add('active');
-      ring3.classList.add('active');
-      stream1.classList.add('active');
-      stream2.classList.add('active');
-      stream3.classList.add('active');
+      document.getElementById('ring-1').classList.add('active');
+      document.getElementById('ring-2').classList.add('active');
+      document.getElementById('ring-3').classList.add('active');
+      document.getElementById('stream-1').classList.add('active');
+      document.getElementById('stream-2').classList.add('active');
+      document.getElementById('stream-3').classList.add('active');
       
-      // Start mining
+      // Mining: 0.00000005 per detik
       miningInterval = setInterval(() => {
-        currentPoints += 0.0010;
-        todayEarned += 0.0010;
+        currentPoints += 0.00000005;
+        todayEarned += 0.00000005;
         updateBalance();
       }, 1000);
       
       showToast('⚡ Node Activated');
     } else {
-      // Sound & vibration
       playPowerOffSound();
       vibrate(50);
       
-      // Visual updates
       btn.classList.remove('active');
       statusText.textContent = 'Tap Logo to Activate';
       statusText.classList.remove('active');
       
-      // FIX: Update balance card status
       balanceCard.classList.remove('active');
       balanceLabel.classList.remove('online');
       balanceLabel.classList.add('offline');
@@ -1307,13 +1350,12 @@
       statusDot.classList.add('offline');
       statusLabelText.textContent = 'Node Offline';
       
-      // Deactivate rings & streams
-      ring1.classList.remove('active');
-      ring2.classList.remove('active');
-      ring3.classList.remove('active');
-      stream1.classList.remove('active');
-      stream2.classList.remove('active');
-      stream3.classList.remove('active');
+      document.getElementById('ring-1').classList.remove('active');
+      document.getElementById('ring-2').classList.remove('active');
+      document.getElementById('ring-3').classList.remove('active');
+      document.getElementById('stream-1').classList.remove('active');
+      document.getElementById('stream-2').classList.remove('active');
+      document.getElementById('stream-3').classList.remove('active');
       
       if (miningInterval) {
         clearInterval(miningInterval);
@@ -1335,7 +1377,7 @@
     updateBalance();
     btn.textContent = '✓';
     btn.classList.add('done');
-    showToast(`+${reward.toFixed(4)} $BOSSX`);
+    showToast(`+${formatNumber(reward)} $BOSSX`);
   }
   
   function remindUser(name) {
