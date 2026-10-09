@@ -15,7 +15,6 @@
     height: 100%;
   }
   
-  /* ============ PHONE FRAME ============ */
   .phone-wrapper {
     display: flex;
     justify-content: center;
@@ -62,10 +61,7 @@
     z-index: 9999;
     transition: opacity 0.5s;
   }
-  .loading-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
   .loading-logo {
     width: 80px;
     height: 80px;
@@ -105,9 +101,7 @@
     width: 0%;
     animation: loadingFill 2s ease-out forwards;
   }
-  @keyframes loadingFill {
-    to { width: 100%; }
-  }
+  @keyframes loadingFill { to { width: 100%; } }
   
   /* ============ BACKGROUND ============ */
   .bg-grid {
@@ -172,12 +166,7 @@
     border-bottom: 1px solid rgba(255,215,0,0.1);
   }
   
-  /* ============ BRAND LOGO + NAME ============ */
-  .brand-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .brand-header { display: flex; align-items: center; gap: 10px; }
   .brand-logo {
     width: 32px;
     height: 32px;
@@ -214,11 +203,7 @@
   .icon-btn:active { transform: scale(0.9); background: rgba(255,215,0,0.1); }
   
   /* ============ SCREENS ============ */
-  .screens-container {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
+  .screens-container { flex: 1; position: relative; overflow: hidden; }
   .screen {
     position: absolute;
     inset: 0;
@@ -498,6 +483,7 @@
     50% { transform: scale(1.4); opacity: 0.8; }
   }
   
+  /* Data Streams */
   .data-stream {
     position: absolute;
     width: 2px;
@@ -515,6 +501,47 @@
     0% { height: 0; top: 50%; }
     50% { height: 100px; top: 0; }
     100% { height: 0; top: -50px; }
+  }
+  
+  /* Satoshi Number - LEBIH LAMBAT, "+5 sat/s" */
+  .satoshi-number {
+    position: absolute;
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    font-weight: 900;
+    color: #ffd700;
+    text-shadow: 
+      0 0 10px rgba(255,215,0,1),
+      0 0 20px rgba(255,215,0,0.6),
+      0 0 30px rgba(255,140,0,0.4);
+    pointer-events: none;
+    opacity: 0;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    z-index: 5;
+  }
+  .satoshi-number.animate {
+    animation: satoshiFloat 3s ease-out forwards;
+  }
+  @keyframes satoshiFloat {
+    0% {
+      transform: translateY(0) scale(0.7);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(-10px) scale(1.1);
+    }
+    20% {
+      transform: translateY(-20px) scale(1);
+    }
+    85% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-90px) scale(0.9);
+      opacity: 0;
+    }
   }
   
   /* Status Text */
@@ -852,31 +879,21 @@
   <div class="phone-frame">
     <div class="notch"></div>
     
-    <!-- Loading -->
     <div class="loading-overlay" id="loading-overlay">
       <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossXp" class="loading-logo">
       <div class="loading-text">BossXp</div>
       <div class="loading-subtext">Airdrop Point Mining</div>
-      <div class="loading-bar">
-        <div class="loading-bar-fill"></div>
-      </div>
+      <div class="loading-bar"><div class="loading-bar-fill"></div></div>
     </div>
     
-    <!-- Background -->
     <div class="bg-grid"></div>
     <div class="matrix-container" id="matrix-container"></div>
     
-    <!-- Status Bar -->
     <div class="status-bar">
       <span id="time">09:41</span>
-      <div>
-        <span>📶</span>
-        <span>📡</span>
-        <span>🔋</span>
-      </div>
+      <div><span>📶</span> <span>📡</span> <span>🔋</span></div>
     </div>
     
-    <!-- App Header dengan LOGO + Nama Brand -->
     <div class="app-header">
       <div class="brand-header">
         <img src="https://i.ibb.co/qYBkPDH3/Picsart-25-04-01-16-25-47-054.png" alt="BossXp" class="brand-logo">
@@ -887,14 +904,11 @@
       </div>
     </div>
     
-    <!-- Screens -->
     <div class="screens-container">
       
       <!-- HOME -->
       <div id="screen-home" class="screen active">
         <div class="home-screen">
-          
-          <!-- Balance Card -->
           <div class="balance-card" id="balance-card">
             <div class="balance-header">
               <div class="balance-label offline" id="balance-label">
@@ -907,7 +921,7 @@
             <div class="balance-stats">
               <div class="balance-stat">
                 <span class="balance-stat-label">Rate</span>
-                <span class="balance-stat-value" id="mining-rate">+0.00000005/s</span>
+                <span class="balance-stat-value" id="mining-rate">+5 sat/s</span>
               </div>
               <div class="balance-stat">
                 <span class="balance-stat-label">Today</span>
@@ -918,8 +932,6 @@
                 <span class="balance-stat-value" id="est-usd">$0.00</span>
               </div>
             </div>
-            
-            <!-- Auto Stop Countdown -->
             <div class="auto-stop-countdown">
               <div class="auto-stop-header">
                 <span class="auto-stop-label">Auto Stop In</span>
@@ -931,8 +943,7 @@
             </div>
           </div>
           
-          <!-- Cyber Node -->
-          <div class="node-container">
+          <div class="node-container" id="node-container">
             <div class="orbital-ring ring-1" id="ring-1"></div>
             <div class="orbital-ring ring-2" id="ring-2"></div>
             <div class="orbital-ring ring-3" id="ring-3"></div>
@@ -950,7 +961,6 @@
           <div class="node-status">
             <div class="status-text" id="status-text">Tap Logo to Activate</div>
           </div>
-          
         </div>
       </div>
       
@@ -1005,34 +1015,19 @@
             <button class="btn-copy" onclick="copyLink()">📋 Salin Link</button>
           </div>
           <div class="team-summary">
-            <div class="team-stat">
-              <div class="team-stat-value" style="color:#ffd700;">15</div>
-              <div class="team-stat-label">Total</div>
-            </div>
-            <div class="team-stat">
-              <div class="team-stat-value" style="color:#00ff88;">12</div>
-              <div class="team-stat-label">Aktif</div>
-            </div>
-            <div class="team-stat">
-              <div class="team-stat-value" style="color:#ff4444;">3</div>
-              <div class="team-stat-label">Belum ON</div>
-            </div>
+            <div class="team-stat"><div class="team-stat-value" style="color:#ffd700;">15</div><div class="team-stat-label">Total</div></div>
+            <div class="team-stat"><div class="team-stat-value" style="color:#00ff88;">12</div><div class="team-stat-label">Aktif</div></div>
+            <div class="team-stat"><div class="team-stat-value" style="color:#ff4444;">3</div><div class="team-stat-label">Belum ON</div></div>
           </div>
           <div class="section-title">Daftar Referral</div>
           <div class="ref-item active">
             <div class="ref-avatar">BS</div>
-            <div class="ref-info">
-              <div class="ref-name">Budi Santoso</div>
-              <div class="ref-detail">ON sejak 06:02 • Level 1</div>
-            </div>
+            <div class="ref-info"><div class="ref-name">Budi Santoso</div><div class="ref-detail">ON sejak 06:02 • Level 1</div></div>
             <span class="ref-status active">AKTIF</span>
           </div>
           <div class="ref-item inactive">
             <div class="ref-avatar">RW</div>
-            <div class="ref-info">
-              <div class="ref-name">Rina Wati</div>
-              <div class="ref-detail">Belum ON hari ini</div>
-            </div>
+            <div class="ref-info"><div class="ref-name">Rina Wati</div><div class="ref-detail">Belum ON hari ini</div></div>
             <button class="btn-remind" onclick="remindUser('Rina')">🔔</button>
           </div>
         </div>
@@ -1047,85 +1042,43 @@
             <span class="profile-level">🥈 SILVER TIER</span>
           </div>
           <div class="profile-stats">
-            <div class="profile-stat">
-              <div class="profile-stat-value" id="profile-points">0.00000000</div>
-              <div class="profile-stat-label">Total Xp</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-value">15</div>
-              <div class="profile-stat-label">Total Referral</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-value">7</div>
-              <div class="profile-stat-label">Streak ON</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-value">🥈</div>
-              <div class="profile-stat-label">Tier Level</div>
-            </div>
+            <div class="profile-stat"><div class="profile-stat-value" id="profile-points">0.00000000</div><div class="profile-stat-label">Total Xp</div></div>
+            <div class="profile-stat"><div class="profile-stat-value">15</div><div class="profile-stat-label">Total Referral</div></div>
+            <div class="profile-stat"><div class="profile-stat-value">7</div><div class="profile-stat-label">Streak ON</div></div>
+            <div class="profile-stat"><div class="profile-stat-value">🥈</div><div class="profile-stat-label">Tier Level</div></div>
           </div>
           <div class="menu-list">
-            <div class="menu-item">
-              <div class="menu-icon">💼</div>
-              <div class="menu-label">Wallet Saya</div>
-              <div class="menu-arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-icon">🔄</div>
-              <div class="menu-label">Konversi Xp ke Token</div>
-              <div class="menu-arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-icon">⚙️</div>
-              <div class="menu-label">Pengaturan</div>
-              <div class="menu-arrow">›</div>
-            </div>
+            <div class="menu-item"><div class="menu-icon">💼</div><div class="menu-label">Wallet Saya</div><div class="menu-arrow">›</div></div>
+            <div class="menu-item"><div class="menu-icon">🔄</div><div class="menu-label">Konversi Xp ke Token</div><div class="menu-arrow">›</div></div>
+            <div class="menu-item"><div class="menu-icon">⚙️</div><div class="menu-label">Pengaturan</div><div class="menu-arrow">›</div></div>
           </div>
         </div>
       </div>
       
     </div>
     
-    <!-- Toast -->
     <div class="toast" id="toast">✅ Node Activated</div>
     
-    <!-- Bottom Nav -->
     <div class="bottom-nav">
-      <button class="nav-item active" onclick="switchTab(0)">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-label">Home</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(1)">
-        <div class="nav-icon">🎁</div>
-        <div class="nav-label">Tugas</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(2)">
-        <div class="nav-icon">👥</div>
-        <div class="nav-label">Referral</div>
-      </button>
-      <button class="nav-item" onclick="switchTab(3)">
-        <div class="nav-icon">👤</div>
-        <div class="nav-label">Profil</div>
-      </button>
+      <button class="nav-item active" onclick="switchTab(0)"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></button>
+      <button class="nav-item" onclick="switchTab(1)"><div class="nav-icon">🎁</div><div class="nav-label">Tugas</div></button>
+      <button class="nav-item" onclick="switchTab(2)"><div class="nav-icon">👥</div><div class="nav-label">Referral</div></button>
+      <button class="nav-item" onclick="switchTab(3)"><div class="nav-icon">👤</div><div class="nav-label">Profil</div></button>
     </div>
     
   </div>
 </div>
 
 <script>
-  // ============ LOADING ============
   window.addEventListener('load', () => {
     setTimeout(() => {
       document.getElementById('loading-overlay').classList.add('hidden');
     }, 2200);
   });
   
-  // ============ SOUND EFFECTS ============
   let audioCtx = null;
   function getAudioContext() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return audioCtx;
   }
   
@@ -1134,15 +1087,13 @@
       const ctx = getAudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(400, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
     } catch(e) {}
   }
   
@@ -1151,15 +1102,13 @@
       const ctx = getAudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(600, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.2);
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.25);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.25);
     } catch(e) {}
   }
   
@@ -1168,16 +1117,14 @@
       const ctx = getAudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(800, ctx.currentTime);
       osc.frequency.setValueAtTime(600, ctx.currentTime + 0.15);
       osc.frequency.setValueAtTime(400, ctx.currentTime + 0.3);
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
     } catch(e) {}
   }
   
@@ -1186,14 +1133,12 @@
       const ctx = getAudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'square';
       osc.frequency.setValueAtTime(1000, ctx.currentTime);
       gain.gain.setValueAtTime(0.05, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.05);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.05);
     } catch(e) {}
   }
   
@@ -1202,165 +1147,113 @@
       const ctx = getAudioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(523, ctx.currentTime);
       osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
       osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
       gain.gain.setValueAtTime(0.15, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
     } catch(e) {}
   }
   
-  function vibrate(pattern) {
-    if (navigator.vibrate) navigator.vibrate(pattern);
-  }
+  function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
   
-  // ============ TAB SWITCHING ============
   const screens = ['screen-home', 'screen-tasks', 'screen-referral', 'screen-profile'];
   function switchTab(index) {
-    playClickSound();
-    vibrate(10);
-    screens.forEach((id, i) => {
-      document.getElementById(id).classList.toggle('active', i === index);
-    });
-    document.querySelectorAll('.nav-item').forEach((item, i) => {
-      item.classList.toggle('active', i === index);
-    });
+    playClickSound(); vibrate(10);
+    screens.forEach((id, i) => document.getElementById(id).classList.toggle('active', i === index));
+    document.querySelectorAll('.nav-item').forEach((item, i) => item.classList.toggle('active', i === index));
   }
   
-  // ============ TIME ============
   function updateTime() {
     const now = new Date();
-    document.getElementById('time').textContent = 
-      `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    document.getElementById('time').textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
   }
-  updateTime();
-  setInterval(updateTime, 1000);
+  updateTime(); setInterval(updateTime, 1000);
   
-  // ============ AUTO STOP COUNTDOWN ============
   let lastAutoStopCheck = null;
-  
   function updateAutoStopCountdown() {
     const now = new Date();
     const target = new Date();
     target.setHours(6, 0, 0, 0);
-    
-    if (now > target) {
-      target.setDate(target.getDate() + 1);
-    }
-    
+    if (now > target) target.setDate(target.getDate() + 1);
     const diff = target - now;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    
-    document.getElementById('countdown').textContent = 
-      `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-    
-    const totalSecondsInCycle = 24 * 60 * 60;
-    const elapsedSeconds = totalSecondsInCycle - (diff / 1000);
-    const progress = (elapsedSeconds / totalSecondsInCycle) * 100;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('countdown').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    const progress = ((86400 - diff/1000) / 86400) * 100;
     document.getElementById('auto-stop-progress').style.width = progress + '%';
   }
   
   function checkAutoStop() {
     const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    
-    if (hours === 6 && minutes === 0 && seconds === 0) {
-      const checkKey = `${now.toDateString()}-06:00:00`;
-      if (lastAutoStopCheck === checkKey) return;
-      lastAutoStopCheck = checkKey;
-      
-      if (isPowerOn) {
-        autoStopNode();
-      }
+    if (now.getHours() === 6 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+      const key = `${now.toDateString()}-06:00:00`;
+      if (lastAutoStopCheck === key) return;
+      lastAutoStopCheck = key;
+      if (isPowerOn) autoStopNode();
     }
   }
   
   function autoStopNode() {
-    playAutoStopSound();
-    vibrate([100, 50, 100, 50, 100]);
-    
-    const btn = document.getElementById('core-node-btn');
-    const statusText = document.getElementById('status-text');
-    const balanceCard = document.getElementById('balance-card');
-    const balanceLabel = document.getElementById('balance-label');
-    const statusDot = document.getElementById('status-dot');
-    const statusLabelText = document.getElementById('status-label-text');
-    
-    btn.classList.remove('active');
-    statusText.textContent = 'Auto Stopped - 06:00';
-    statusText.classList.remove('active');
-    
-    balanceCard.classList.remove('active');
-    balanceLabel.classList.remove('online');
-    balanceLabel.classList.add('offline');
-    statusDot.classList.remove('online');
-    statusDot.classList.add('offline');
-    statusLabelText.textContent = 'Node Offline';
-    
-    document.getElementById('ring-1').classList.remove('active');
-    document.getElementById('ring-2').classList.remove('active');
-    document.getElementById('ring-3').classList.remove('active');
-    document.getElementById('stream-1').classList.remove('active');
-    document.getElementById('stream-2').classList.remove('active');
-    document.getElementById('stream-3').classList.remove('active');
-    
-    if (miningInterval) {
-      clearInterval(miningInterval);
-      miningInterval = null;
-    }
-    
+    playAutoStopSound(); vibrate([100, 50, 100, 50, 100]);
+    document.getElementById('core-node-btn').classList.remove('active');
+    const st = document.getElementById('status-text');
+    st.textContent = 'Auto Stopped - 06:00'; st.classList.remove('active');
+    document.getElementById('balance-card').classList.remove('active');
+    const bl = document.getElementById('balance-label');
+    bl.classList.remove('online'); bl.classList.add('offline');
+    const sd = document.getElementById('status-dot');
+    sd.classList.remove('online'); sd.classList.add('offline');
+    document.getElementById('status-label-text').textContent = 'Node Offline';
+    ['ring-1','ring-2','ring-3','stream-1','stream-2','stream-3'].forEach(id => document.getElementById(id).classList.remove('active'));
+    if (miningInterval) { clearInterval(miningInterval); miningInterval = null; }
+    if (satoshiInterval) { clearInterval(satoshiInterval); satoshiInterval = null; }
     isPowerOn = false;
-    
     showToast('⏰ Auto Stop 06:00 - Siklus Baru Dimulai');
-    
-    setTimeout(() => {
-      if (!isPowerOn) {
-        statusText.textContent = 'Tap Logo to Activate';
-      }
-    }, 3000);
+    setTimeout(() => { if (!isPowerOn) st.textContent = 'Tap Logo to Activate'; }, 3000);
   }
   
-  setInterval(() => {
-    updateAutoStopCountdown();
-    checkAutoStop();
-  }, 1000);
+  setInterval(() => { updateAutoStopCountdown(); checkAutoStop(); }, 1000);
   updateAutoStopCountdown();
   
-  // ============ MATRIX PARTICLES ============
   function createMatrixParticles() {
-    const container = document.getElementById('matrix-container');
-    const chars = '01';
+    const c = document.getElementById('matrix-container');
     for (let i = 0; i < 25; i++) {
-      const char = document.createElement('div');
-      char.className = 'matrix-char';
-      char.textContent = chars[Math.floor(Math.random() * chars.length)];
-      char.style.left = Math.random() * 100 + '%';
-      char.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      char.style.animationDelay = Math.random() * 5 + 's';
-      container.appendChild(char);
+      const ch = document.createElement('div');
+      ch.className = 'matrix-char';
+      ch.textContent = '01'[Math.floor(Math.random() * 2)];
+      ch.style.left = Math.random() * 100 + '%';
+      ch.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      ch.style.animationDelay = Math.random() * 5 + 's';
+      c.appendChild(ch);
     }
   }
   createMatrixParticles();
   
-  // ============ MINING LOGIC ============
-  let currentPoints = 0;
-  let todayEarned = 0;
-  let isPowerOn = false;
-  let miningInterval = null;
-  
-  function formatNumber(num) {
-    return num.toFixed(8);
+  // SATOSHI NUMBER - HANYA TENGAH, TEXT "+5 sat/s", LEBIH LAMBAT
+  function spawnSatoshiNumber() {
+    if (!isPowerOn) return;
+    const nc = document.getElementById('node-container');
+    const s = document.getElementById('stream-2');
+    const sr = s.getBoundingClientRect();
+    const cr = nc.getBoundingClientRect();
+    const num = document.createElement('div');
+    num.className = 'satoshi-number';
+    num.textContent = '+5 sat/s';
+    num.style.left = ((sr.left - cr.left) + sr.width / 2) + 'px';
+    num.style.top = ((sr.top - cr.top) + 20) + 'px';
+    num.style.transform = 'translateX(-50%)';
+    nc.appendChild(num);
+    setTimeout(() => num.classList.add('animate'), 10);
+    setTimeout(() => num.remove(), 3000);
   }
   
+  let currentPoints = 0, todayEarned = 0, isPowerOn = false, miningInterval = null, satoshiInterval = null;
+  function formatNumber(n) { return n.toFixed(8); }
   function updateBalance() {
     document.getElementById('balance-amount').textContent = formatNumber(currentPoints);
     document.getElementById('today-earned').textContent = '+' + formatNumber(todayEarned);
@@ -1370,69 +1263,35 @@
   
   function togglePower() {
     const btn = document.getElementById('core-node-btn');
-    const statusText = document.getElementById('status-text');
-    const balanceCard = document.getElementById('balance-card');
-    const balanceLabel = document.getElementById('balance-label');
-    const statusDot = document.getElementById('status-dot');
-    const statusLabelText = document.getElementById('status-label-text');
-    
+    const st = document.getElementById('status-text');
+    const bc = document.getElementById('balance-card');
+    const bl = document.getElementById('balance-label');
+    const sd = document.getElementById('status-dot');
+    const sl = document.getElementById('status-label-text');
     isPowerOn = !isPowerOn;
-    
     if (isPowerOn) {
-      playPowerOnSound();
-      vibrate([30, 50, 30]);
-      
+      playPowerOnSound(); vibrate([30, 50, 30]);
       btn.classList.add('active');
-      statusText.textContent = 'Mining Active';
-      statusText.classList.add('active');
-      
-      balanceCard.classList.add('active');
-      balanceLabel.classList.remove('offline');
-      balanceLabel.classList.add('online');
-      statusDot.classList.remove('offline');
-      statusDot.classList.add('online');
-      statusLabelText.textContent = 'Node Active';
-      
-      document.getElementById('ring-1').classList.add('active');
-      document.getElementById('ring-2').classList.add('active');
-      document.getElementById('ring-3').classList.add('active');
-      document.getElementById('stream-1').classList.add('active');
-      document.getElementById('stream-2').classList.add('active');
-      document.getElementById('stream-3').classList.add('active');
-      
-      miningInterval = setInterval(() => {
-        currentPoints += 0.00000005;
-        todayEarned += 0.00000005;
-        updateBalance();
-      }, 1000);
-      
+      st.textContent = 'Mining Active'; st.classList.add('active');
+      bc.classList.add('active');
+      bl.classList.remove('offline'); bl.classList.add('online');
+      sd.classList.remove('offline'); sd.classList.add('online');
+      sl.textContent = 'Node Active';
+      ['ring-1','ring-2','ring-3','stream-1','stream-2','stream-3'].forEach(id => document.getElementById(id).classList.add('active'));
+      miningInterval = setInterval(() => { currentPoints += 0.00000005; todayEarned += 0.00000005; updateBalance(); }, 1000);
+      satoshiInterval = setInterval(spawnSatoshiNumber, 1000);
       showToast('⚡ Node Activated');
     } else {
-      playPowerOffSound();
-      vibrate(50);
-      
+      playPowerOffSound(); vibrate(50);
       btn.classList.remove('active');
-      statusText.textContent = 'Tap Logo to Activate';
-      statusText.classList.remove('active');
-      
-      balanceCard.classList.remove('active');
-      balanceLabel.classList.remove('online');
-      balanceLabel.classList.add('offline');
-      statusDot.classList.remove('online');
-      statusDot.classList.add('offline');
-      statusLabelText.textContent = 'Node Offline';
-      
-      document.getElementById('ring-1').classList.remove('active');
-      document.getElementById('ring-2').classList.remove('active');
-      document.getElementById('ring-3').classList.remove('active');
-      document.getElementById('stream-1').classList.remove('active');
-      document.getElementById('stream-2').classList.remove('active');
-      document.getElementById('stream-3').classList.remove('active');
-      
-      if (miningInterval) {
-        clearInterval(miningInterval);
-        miningInterval = null;
-      }
+      st.textContent = 'Tap Logo to Activate'; st.classList.remove('active');
+      bc.classList.remove('active');
+      bl.classList.remove('online'); bl.classList.add('offline');
+      sd.classList.remove('online'); sd.classList.add('offline');
+      sl.textContent = 'Node Offline';
+      ['ring-1','ring-2','ring-3','stream-1','stream-2','stream-3'].forEach(id => document.getElementById(id).classList.remove('active'));
+      if (miningInterval) { clearInterval(miningInterval); miningInterval = null; }
+      if (satoshiInterval) { clearInterval(satoshiInterval); satoshiInterval = null; }
       showToast('⏸️ Node Deactivated');
     }
   }
@@ -1440,35 +1299,19 @@
   function completeTask(el, reward) {
     const btn = el.querySelector('.task-btn');
     if (btn.classList.contains('done')) return;
-    
-    playRewardSound();
-    vibrate(20);
-    
-    currentPoints += reward;
-    todayEarned += reward;
-    updateBalance();
-    btn.textContent = '✓';
-    btn.classList.add('done');
+    playRewardSound(); vibrate(20);
+    currentPoints += reward; todayEarned += reward; updateBalance();
+    btn.textContent = '✓'; btn.classList.add('done');
     showToast(`+${formatNumber(reward)} Xp`);
   }
   
-  function remindUser(name) {
-    playClickSound();
-    vibrate(15);
-    showToast(`🔔 Notifikasi dikirim ke ${name}`);
-  }
-  
-  function copyLink() {
-    playClickSound();
-    vibrate(15);
-    showToast('📋 Link berhasil disalin!');
-  }
+  function remindUser(name) { playClickSound(); vibrate(15); showToast(`🔔 Notifikasi dikirim ke ${name}`); }
+  function copyLink() { playClickSound(); vibrate(15); showToast('📋 Link berhasil disalin!'); }
   
   function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 </script>
 
