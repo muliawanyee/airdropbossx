@@ -306,9 +306,14 @@
     font-family: 'Courier New', monospace;
   }
   
-  /* Auto Stop Info */
-  .auto-stop-info {
+  /* Auto Stop Countdown */
+  .auto-stop-countdown {
     padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .auto-stop-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -332,10 +337,25 @@
     animation: blink 2s infinite;
   }
   .auto-stop-time {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
     color: #ff8c00;
     font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(255,140,0,0.5);
+  }
+  .auto-stop-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,140,0,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .auto-stop-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #ff8c00);
+    border-radius: 2px;
+    transition: width 1s linear;
+    box-shadow: 0 0 10px rgba(255,140,0,0.5);
   }
   
   /* ============ CYBER NODE ============ */
@@ -869,10 +889,15 @@
               </div>
             </div>
             
-            <!-- Auto Stop Info (Pengganti Next Cycle) -->
-            <div class="auto-stop-info">
-              <span class="auto-stop-label">Auto Stop</span>
-              <span class="auto-stop-time">06:00 AM</span>
+            <!-- Auto Stop Countdown (dengan timer) -->
+            <div class="auto-stop-countdown">
+              <div class="auto-stop-header">
+                <span class="auto-stop-label">Auto Stop In</span>
+                <span class="auto-stop-time" id="countdown">--:--:--</span>
+              </div>
+              <div class="auto-stop-bar">
+                <div class="auto-stop-progress" id="auto-stop-progress" style="width: 0%;"></div>
+              </div>
             </div>
           </div>
           
@@ -1186,8 +1211,33 @@
   updateTime();
   setInterval(updateTime, 1000);
   
-  // ============ AUTO STOP CHECKER (06:00) ============
+  // ============ AUTO STOP COUNTDOWN (menuju jam 06:00) ============
   let lastAutoStopCheck = null;
+  
+  function updateAutoStopCountdown() {
+    const now = new Date();
+    const target = new Date();
+    target.setHours(6, 0, 0, 0);
+    
+    // Jika sudah lewat jam 6 pagi, target besok jam 6
+    if (now > target) {
+      target.setDate(target.getDate() + 1);
+    }
+    
+    const diff = target - now;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    document.getElementById('countdown').textContent = 
+      `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    
+    // Progress bar (24 jam = 100%)
+    const totalSecondsInCycle = 24 * 60 * 60;
+    const elapsedSeconds = totalSecondsInCycle - (diff / 1000);
+    const progress = (elapsedSeconds / totalSecondsInCycle) * 100;
+    document.getElementById('auto-stop-progress').style.width = progress + '%';
+  }
   
   function checkAutoStop() {
     const now = new Date();
@@ -1197,12 +1247,10 @@
     
     // Cek tepat jam 06:00:00
     if (hours === 6 && minutes === 0 && seconds === 0) {
-      // Cegah trigger berulang dalam detik yang sama
       const checkKey = `${now.toDateString()}-06:00:00`;
       if (lastAutoStopCheck === checkKey) return;
       lastAutoStopCheck = checkKey;
       
-      // Jika node aktif, auto stop
       if (isPowerOn) {
         autoStopNode();
       }
@@ -1210,11 +1258,9 @@
   }
   
   function autoStopNode() {
-    // Sound & vibration khusus auto-stop
     playAutoStopSound();
     vibrate([100, 50, 100, 50, 100]);
     
-    // Visual updates
     const btn = document.getElementById('core-node-btn');
     const statusText = document.getElementById('status-text');
     const balanceCard = document.getElementById('balance-card');
@@ -1233,7 +1279,6 @@
     statusDot.classList.add('offline');
     statusLabelText.textContent = 'Node Offline';
     
-    // Deactivate rings & streams
     document.getElementById('ring-1').classList.remove('active');
     document.getElementById('ring-2').classList.remove('active');
     document.getElementById('ring-3').classList.remove('active');
@@ -1241,7 +1286,6 @@
     document.getElementById('stream-2').classList.remove('active');
     document.getElementById('stream-3').classList.remove('active');
     
-    // Stop mining
     if (miningInterval) {
       clearInterval(miningInterval);
       miningInterval = null;
@@ -1251,7 +1295,6 @@
     
     showToast('⏰ Auto Stop 06:00 - Siklus Baru Dimulai');
     
-    // Reset status text setelah 3 detik
     setTimeout(() => {
       if (!isPowerOn) {
         statusText.textContent = 'Tap Logo to Activate';
@@ -1259,8 +1302,12 @@
     }, 3000);
   }
   
-  // Jalankan auto-stop checker setiap detik
-  setInterval(checkAutoStop, 1000);
+  // Jalankan countdown & auto-stop checker setiap detik
+  setInterval(() => {
+    updateAutoStopCountdown();
+    checkAutoStop();
+  }, 1000);
+  updateAutoStopCountdown();
   
   // ============ MATRIX PARTICLES ============
   function createMatrixParticles() {
@@ -1278,7 +1325,7 @@
   }
   createMatrixParticles();
   
-  // ============ MINING LOGIC (0.00000005 per detik, 8 desimal) ============
+  // ============ MINING LOGIC ============
   let currentPoints = 0;
   let todayEarned = 0;
   let isPowerOn = false;
@@ -1327,7 +1374,6 @@
       document.getElementById('stream-2').classList.add('active');
       document.getElementById('stream-3').classList.add('active');
       
-      // Mining: 0.00000005 per detik
       miningInterval = setInterval(() => {
         currentPoints += 0.00000005;
         todayEarned += 0.00000005;
